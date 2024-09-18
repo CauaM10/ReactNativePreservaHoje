@@ -5,21 +5,24 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 import { useContext } from 'react';
 import { AuthContext } from '../Context/AuthContext';
 
+import Inicial from '../Pages/Inicial';
 
-
+import Cadastro from '../Pages/Cadastro'
 import Login from '../Pages/Login';
-
 
 
 const Tab = createBottomTabNavigator();
 
 export default function Rotas() {
 
-    const { logado } = useContext(AuthContext);
+    const { logado,cadastro } = useContext(AuthContext);
 
-    if (!logado) {
+   /* if (!logado && !cadastro) {
         return (<Login />)
     }
+    if(!logado && cadastro){
+        return(< Cadastro/>)
+    }*/
 
     return (
         <NavigationContainer>
@@ -33,7 +36,20 @@ export default function Rotas() {
                     tabBarActiveTintColor: "white"
                 }}
             >
-    
+                <Tab.Screen
+                    name="Inicial"
+                    component={Inicial}
+                    options={{
+                        tabBarIcon: ({ color, size }) => (
+                            <MaterialCommunityIcons name="home" color={color} size={size} />
+                        ),
+                    }}
+                />
+              
+           
+
+
+           
             </Tab.Navigator>
         </NavigationContainer>
     )
