@@ -9,13 +9,14 @@ import Inicial from '../Pages/Inicial';
 
 import Cadastro from '../Pages/Cadastro'
 import Login from '../Pages/Login';
+import { Text } from 'react-native';
 
 
 const Tab = createBottomTabNavigator();
 
 export default function Rotas() {
 
-    const { logado,cadastro } = useContext(AuthContext);
+    const { logado,cadastro, action } = useContext(AuthContext);
 
    /* if (!logado && !cadastro) {
         return (<Login />)
@@ -24,33 +25,12 @@ export default function Rotas() {
         return(< Cadastro/>)
     }*/
 
-    return (
-        <NavigationContainer>
-            <Tab.Navigator
-                screenOptions={{
-                    headerShown: false,
-                    tabBarShowLabel: false,
-                    tabBarStyle: {
-                        backgroundColor: '#191919',
-                    },
-                    tabBarActiveTintColor: "white"
-                }}
-            >
-                <Tab.Screen
-                    name="Inicial"
-                    component={Inicial}
-                    options={{
-                        tabBarIcon: ({ color, size }) => (
-                            <MaterialCommunityIcons name="home" color={color} size={size} />
-                        ),
-                    }}
-                />
-              
-           
+    if( action == "home" ) {
+        return( <Inicial /> )
+    }
 
 
-           
-            </Tab.Navigator>
-        </NavigationContainer>
-    )
+    /*if( action == "sobre" ) {
+        return( < Sobre/> )
+    }*/
 }

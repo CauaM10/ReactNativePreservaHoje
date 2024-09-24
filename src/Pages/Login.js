@@ -44,7 +44,7 @@ export default function Login({ }) {
             <TouchableOpacity style={css.btnLogin} onPress={RealizaLogin}>
                 <Text style={css.btnLoginText}>Login</Text>
             </TouchableOpacity>
-            <TouchableOpacity style={css.btnCadastro} onPress={ () => setCadastro( true ) }>
+            <TouchableOpacity style={css.btnCadastro} on={ () => setCadastro( true ) }>
                 <Text style={css.btnCadastroText}>Cadastre-se</Text>
             </TouchableOpacity>
             {error &&
