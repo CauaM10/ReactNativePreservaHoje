@@ -1,187 +1,374 @@
-import { ScrollView, TextInput, StyleSheet, TouchableOpacity, Text, View, KeyboardAvoidingView, Button, } from "react-native";
-import React, { useContext, useState } from 'react'
-import { LinearGradient } from 'expo-linear-gradient';
+import React, { useState } from 'react';
+import { View, Text, TextInput, TouchableOpacity, StyleSheet, Animated } from 'react-native';
+
+// Componente para círculo de progresso com animação
+const ProgressCircle = ({ isActive, isCompleted, label }) => {
+  const animatedScale = new Animated.Value(1);
+
+  const startAnimation = () => {
+    Animated.spring(animatedScale, {
+      toValue: isActive ? 1.2 : 1,
+      friction: 3,
+      tension: 100,
+      useNativeDriver: true,
+    }).start();
+  };
+
+  if (isActive || isCompleted) {
+    startAnimation();
+  }
+
+  return (
+    <View style={styles.circleContainer}>
+      <Animated.View style={[styles.circle, isCompleted && styles.circleCompleted, { transform: [{ scale: animatedScale }] }]}>
+        {isCompleted && <Text style={styles.checkmark}>✓</Text>}
+      </Animated.View>
+      <Text style={[styles.circleLabel, isCompleted && styles.circleLabelCompleted]}>{label}</Text>
+    </View>
+  );
+};
+
+// Barra de progresso com transição suave
+const ProgressBar = ({ progress }) => (
+  <View style={styles.progressBarContainer}>
+    {Array(4).fill(0).map((_, index) => (
+      <React.Fragment key={index}>
+        <ProgressCircle
+          isActive={progress > index}
+          isCompleted={progress >= index + 1}
+          label={`Step ${index + 1}`}
+        />
+        {index < 3 && <View style={[styles.line, progress > index + 1 && styles.lineActive]} />}
+      </React.Fragment>
+    ))}
+  </View>
+);
 
 export default function Registro() {
+  const [name, setName] = useState('');
+  const [progress, setProgress] = useState(1);
+
+  const handleContinue = () => {
+    if (name && progress < 4) {
+      setProgress(prev => prev + 1);
+    }
+  };
+
+  const handleBack = () => {
+    if (progress > 1) {
+      setProgress(prev => prev - 1);
+    }
+  };
+
+  return (
+    <View style={styles.container}>
+      {/* Barra de Progresso */}
+      <ProgressBar progress={progress} />
 
 
 
-    const [odometro, setOdometro] = useState("");
-    const [marcaveiculo, setMarcaVeiculo] = useState("");
-    const [modeloveiculo, setModeloVeiculo] = useState("");
-    const [combustivel, setCombustivel] = useState("");
-    const [pesocarga, setPesoCarga] = useState("");
-    const [nomecondutor, setNomeCondutor] = useState("");
 
-    /*  async function Cadastro() {
-          await fetch( 'http://10.139.75.32:5251/api/Usuarios/CreateUsuario', {
-            method: 'POST',
-            headers: {
-              'content-type': 'application/json'
-            },
-            body: JSON.stringify({
-              usuarioNome: nome,
-              usuarioEmail: email,
-              usuarioTelefone: telefone,
-              usuarioSenha: senha
-            })
-          })
-            .then(res => res.json())
-            .then(json => {
-              setsucesso((json.usuarioId) ? true : false);
-              seterro((json.usuarioId) ? false : true);
-            })
-            .catch(err => seterro(true))
-        }*/
-
-    return (
+      {progress == 1 &&
         <>
-            <View style={css.header}>
-                <Text style={css.headerText}> PreservaHoje </Text>
+          {/* Rótulo do Formulário */}
+          <Text style={styles.label}>Your Full Name</Text>
 
-                <Text style={css.headerText2}> Registrar Veiculos</Text>
+          {/* Campo de Entrada */}
+          <TextInput
+            style={styles.input}
+            placeholder="John Doe"
+            value={name}
+            onChangeText={setName}
+            placeholderTextColor="#A0A0A0"
+          />
 
+          {/* Botões Horizontais */}
+          <View style={styles.buttonContainer}>
+            {/* Botão Continuar */}
+            <TouchableOpacity
+              style={[styles.button, !name && styles.buttonDisabled]}
+              onPress={handleContinue}
+              disabled={!name}
+            >
+              <Text style={styles.buttonText}>Continue</Text>
+            </TouchableOpacity>
 
-
-            </View>
-            <ScrollView style={css.container} contentContainerStyle={{ justifyContent: "center", alignItems: "center" }}>
-                <KeyboardAvoidingView behavior="padding" style={{ width: "100%", justifyContent: "center", alignItems: "center" }}>
-                    <TextInput
-                        inputMode="text"
-                        placeholder="Odometro(Atual)"
-                        style={css.input}
-                        value={odometro}
-                        onChangeText={(digitado) => setOdometro(digitado)}
-                        placeholderTextColor="black"
-                    />
-                    <TextInput
-                        inputMode="text"
-                        placeholder="Marca do Veiculo"
-                        style={css.input}
-                        value={marcaveiculo}
-                        onChangeText={(digitado) => setMarcaVeiculo(digitado)}
-                        placeholderTextColor="black"
-                    />
-                    <TextInput
-                        inputMode="text"
-                        placeholder="Modelo do Veiculo"
-                        style={css.input}
-                        value={modeloveiculo}
-                        onChangeText={(digitado) => setModeloVeiculo(digitado)}
-                        placeholderTextColor="black"
-                    />
-                    <TextInput
-                        inputMode="text"
-                        placeholder="Combustivel"
-                        style={css.input}
-                        value={combustivel}
-                        onChangeText={(digitado) => setCombustivel(digitado)}
-                        placeholderTextColor="black"
-                    />
-                    <TextInput
-                        inputMode="text"
-                        placeholder="Peso Maximo de Carga"
-                        style={css.input}
-                        value={pesocarga}
-                        onChangeText={(digitado) => setPesoCarga(digitado)}
-                        placeholderTextColor="black"
-                    />
-                    <TextInput
-                        inputMode="text"
-                        placeholder="Nome do Condutor"
-                        style={css.input}
-                        value={nomecondutor}
-                        onChangeText={(digitado) => setNomeCondutor(digitado)}
-                        placeholderTextColor="black"
-                    />
-                    <LinearGradient  colors={['#87CE57', '#98E28B']} style={css.btnCadastrar} /*onPress={Cadastro}*/>
-                        <Text style={css.btnCadastrarText}>Finalizar</Text>
-                    </LinearGradient>
-                </KeyboardAvoidingView>
-
-        
-            </ScrollView>
+            {/* Botão Voltar */}
+            {progress > 1 && (
+              <TouchableOpacity
+                style={[styles.button, styles.backButton]}
+                onPress={handleBack}
+              >
+                <Text style={styles.buttonText}>Back</Text>
+              </TouchableOpacity>
+            )}
+          </View>
         </>
-    )
+      }
+
+      {progress == 2 &&
+        <>
+          {/* Rótulo do Formulário */}
+          <Text style={styles.label}>Your Full Name</Text>
+
+          {/* Campo de Entrada */}
+          <TextInput
+            style={styles.input}
+            placeholder="John Doe"
+            value={name}
+            onChangeText={setName}
+            placeholderTextColor="#A0A0A0"
+          />
+          {/* Campo de Entrada */}
+          <TextInput
+            style={styles.input}
+            placeholder="John Doe"
+            value={name}
+            onChangeText={setName}
+            placeholderTextColor="#A0A0A0"
+          />
+
+          {/* Botões Horizontais */}
+          <View style={styles.buttonContainer}>
+            {/* Botão Continuar */}
+            <TouchableOpacity
+              style={[styles.button, !name && styles.buttonDisabled]}
+              onPress={handleContinue}
+              disabled={!name}
+            >
+              <Text style={styles.buttonText}>Continue</Text>
+            </TouchableOpacity>
+
+            {/* Botão Voltar */}
+            {progress > 1 && (
+              <TouchableOpacity
+                style={[styles.button, styles.backButton]}
+                onPress={handleBack}
+              >
+                <Text style={styles.buttonText}>Back</Text>
+              </TouchableOpacity>
+            )}
+          </View>
+        </>
+      }
+
+      {progress == 3 &&
+        <>
+          {/* Rótulo do Formulário */}
+          <Text style={styles.label}>Your Full Name</Text>
+
+          {/* Campo de Entrada */}
+          <TextInput
+            style={styles.input}
+            placeholder="John Doe"
+            value={name}
+            onChangeText={setName}
+            placeholderTextColor="#A0A0A0"
+          />
+          {/* Campo de Entrada */}
+          <TextInput
+            style={styles.input}
+            placeholder="John Doe"
+            value={name}
+            onChangeText={setName}
+            placeholderTextColor="#A0A0A0"
+          />
+          {/* Campo de Entrada */}
+          <TextInput
+            style={styles.input}
+            placeholder="John Doe"
+            value={name}
+            onChangeText={setName}
+            placeholderTextColor="#A0A0A0"
+          />
+
+          {/* Botões Horizontais */}
+          <View style={styles.buttonContainer}>
+            {/* Botão Continuar */}
+            <TouchableOpacity
+              style={[styles.button, !name && styles.buttonDisabled]}
+              onPress={handleContinue}
+              disabled={!name}
+            >
+              <Text style={styles.buttonText}>Continue</Text>
+            </TouchableOpacity>
+
+            {/* Botão Voltar */}
+            {progress > 1 && (
+              <TouchableOpacity
+                style={[styles.button, styles.backButton]}
+                onPress={handleBack}
+              >
+                <Text style={styles.buttonText}>Back</Text>
+              </TouchableOpacity>
+            )}
+          </View>
+        </>
+      }
+
+      {progress == 4 &&
+        <>
+          {/* Rótulo do Formulário */}
+          <Text style={styles.label}>Your Full Name</Text>
+
+          {/* Campo de Entrada */}
+          <TextInput
+            style={styles.input}
+            placeholder="John Doe"
+            value={name}
+            onChangeText={setName}
+            placeholderTextColor="#A0A0A0"
+          />
+          {/* Campo de Entrada */}
+          <TextInput
+            style={styles.input}
+            placeholder="John Doe"
+            value={name}
+            onChangeText={setName}
+            placeholderTextColor="#A0A0A0"
+          />
+          {/* Campo de Entrada */}
+          <TextInput
+            style={styles.input}
+            placeholder="John Doe"
+            value={name}
+            onChangeText={setName}
+            placeholderTextColor="#A0A0A0"
+          />
+          {/* Campo de Entrada */}
+          <TextInput
+            style={styles.input}
+            placeholder="John Doe"
+            value={name}
+            onChangeText={setName}
+            placeholderTextColor="#A0A0A0"
+          />
+
+          {/* Botões Horizontais */}
+          <View style={styles.buttonContainer}>
+            {/* Botão Continuar */}
+            <TouchableOpacity
+              style={[styles.button, !name && styles.buttonDisabled]}
+              onPress={handleContinue}
+              disabled={!name}
+            >
+              <Text style={styles.buttonText}>Continue</Text>
+            </TouchableOpacity>
+
+            {/* Botão Voltar */}
+            {progress > 1 && (
+              <TouchableOpacity
+                style={[styles.button, styles.backButton]}
+                onPress={handleBack}
+              >
+                <Text style={styles.buttonText}>Back</Text>
+              </TouchableOpacity>
+            )}
+          </View>
+        </>
+      }
+    </View>
+  );
 }
 
-
-const css = StyleSheet.create({
-    header: {
-        width: "100%",
-        height: "30%",
-        backgroundColor: "white",
-        justifyContent: "center",
-        top: 0,
-        position: "absolute",
-        zIndex: 1
-    },
-    headerText: {
-        color: "black",
-        fontSize: 20,
-        textAlign:"right",
-        marginRight:10,
-    },
-    headerText2: {
-        color: "black",
-        fontSize: 20,
-        marginLeft:20
-     
-    },
-    container: {
-        width: "100%",
-        height: "80%",
-        position: "absolute",
-        backgroundColor: "white",
-        paddingVertical: 25,
-        color: "black",
-        bottom: 0,
-        zIndex: 2
-    },
-    text: {
-        color: "black"
-    },
-    input: {
-        width: "90%",
-        height: 50,
-        borderBottomWidth: 1, // define a largura da borda na parte inferior
-        borderBottomColor: 'black', // define a cor da borda
-        marginBottom: 20,
-        padding: 15,
-        backgroundColor: "white",
-        color: "black",
-
-    },
-
-    btnCadastrar: {
-        width: "90%",
-        height: 55,
-        borderRadius: 10,
-        marginTop: 10,
-        marginBottom: 5,
-        backgroundColor: "#0195fd"
-    },
-    btnCadastrarText: {
-        color: "white",
-        lineHeight: 45,
-        textAlign: "center",
-        fontSize: 15,
-        fontWeight: "bold",
-        marginTop:3
-    },
-
-
-    erro: {
-        width: "100%",
-        height: 50,
-        marginTop: 30
-    },
-    erroText: {
-        color: "white",
-        textAlign: "center"
-    },
-
-
-
-
-})
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    justifyContent: 'center',
+    padding: 20,
+    backgroundColor: '#fff',
+  },
+  progressBarContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginBottom: 40,
+  },
+  circleContainer: {
+    alignItems: 'center',
+    marginHorizontal: 10,
+  },
+  circle: {
+    width: 50,
+    height: 50,
+    borderRadius: 25,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#D3D3D3',
+    borderWidth: 2,
+    borderColor: '#D3D3D3',
+  },
+  circleCompleted: {
+    backgroundColor: '#4CAF50', // Verde para círculos completados
+    borderColor: '#4CAF50',
+  },
+  checkmark: {
+    color: '#fff',
+    fontWeight: 'bold',
+    fontSize: 18,
+  },
+  line: {
+    width: 40,
+    height: 4,
+    backgroundColor: '#D3D3D3',
+    borderRadius: 2,
+  },
+  lineActive: {
+    backgroundColor: '#4CAF50', // Verde para linha ativa
+  },
+  label: {
+    fontSize: 20,
+    color: '#333',
+    marginBottom: 10,
+    textAlign: 'center',
+    fontWeight: '500',
+  },
+  input: {
+    height: 50,
+    borderWidth: 1,
+    borderColor: '#ccc',
+    borderRadius: 25,
+    paddingHorizontal: 20,
+    backgroundColor: '#F8F8F8',
+    fontSize: 16,
+    marginBottom: 30,
+    color: '#333',
+  },
+  buttonContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginTop: 20,
+  },
+  button: {
+    flex: 1,
+    backgroundColor: 'green',
+    borderRadius: 25,
+    paddingVertical: 15,
+    alignItems: 'center',
+    marginHorizontal: 5,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.3,
+    shadowRadius: 4,
+    elevation: 3,
+  },
+  backButton: {
+    backgroundColor: '#D3D3D3',
+  },
+  buttonDisabled: {
+    opacity: 0.5,
+  },
+  buttonText: {
+    color: 'white',
+    fontSize: 18,
+    fontWeight: 'bold',
+  },
+  circleLabel: {
+    fontSize: 14,
+    color: '#333',
+  },
+  circleLabelCompleted: {
+    fontWeight: 'bold',
+    color: '#4CAF50', // Verde para o rótulo de círculos completados
+  },
+});
