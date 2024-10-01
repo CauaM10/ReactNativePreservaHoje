@@ -14,7 +14,7 @@ export default function Inicial({navigation}) {
         { id: '2', title: 'Relatório', icon: 'file-chart', },
         { id: '3', title: 'Frota', icon: 'truck-delivery' },
         { id: '4', title: 'Calcular Emissão', icon: 'calculator' },
-        { id: '5', title: 'Registrar Veículo', icon: 'book-open-page-variant' },
+        { id: '5', title: 'Registrar Veículo', icon: 'book-open-page-variant' , pagina: "registro"},
         { id: '6', icon: 'book-open-page-variant', image: require("../../assets/maoflor.png") },
     ];
 

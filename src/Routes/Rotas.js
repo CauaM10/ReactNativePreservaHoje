@@ -6,6 +6,7 @@ import { useContext } from 'react';
 import { AuthContext } from '../Context/AuthContext';
 
 import Inicial from '../Pages/Inicial';
+import Registro from '../Pages/Registro'
 
 import Cadastro from '../Pages/Cadastro'
 import Login from '../Pages/Login';
@@ -33,4 +34,8 @@ export default function Rotas() {
     /*if( action == "sobre" ) {
         return( < Sobre/> )
     }*/
+
+        if(action == "registro"){
+            return(< Registro/>)
+        }
 }
