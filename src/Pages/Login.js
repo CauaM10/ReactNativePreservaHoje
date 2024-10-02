@@ -4,7 +4,7 @@ import { AuthContext } from '../Context/AuthContext';
 
 
 
-export default function Login({ }) {
+export default function Login({}) {
 
 
 
@@ -20,6 +20,8 @@ export default function Login({ }) {
 
     return (
         <ScrollView contentContainerStyle={css.container}>
+
+        
             
             <TextInput
                 inputMode="email"

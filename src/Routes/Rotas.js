@@ -7,6 +7,7 @@ import { AuthContext } from '../Context/AuthContext';
 
 import Inicial from '../Pages/Inicial';
 import Registro from '../Pages/Registro'
+import Sobrenos from '../Pages/Sobrenos'
 
 import Cadastro from '../Pages/Cadastro'
 import Login from '../Pages/Login';
@@ -31,11 +32,13 @@ export default function Rotas() {
     }
 
 
-    /*if( action == "sobre" ) {
-        return( < Sobre/> )
-    }*/
+    if( action == "sobre" ) {
+        return( < Sobrenos/> )
+    }
 
         if(action == "registro"){
             return(< Registro/>)
         }
+
+       
 }
