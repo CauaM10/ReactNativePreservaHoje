@@ -13,9 +13,9 @@ export default function Inicial({navigation}) {
         { id: '1', title: 'Sobre Nós', icon: 'arrow-up-bold-circle-outline', pagina: "sobre"},
         { id: '2', title: 'Relatório', icon: 'file-chart', },
         { id: '3', title: 'Frota', icon: 'truck-delivery' },
-        { id: '4', title: 'Calcular Emissão', icon: 'calculator' },
+        { id: '4', title: 'Reduzir impactos', icon: 'cart-outline' },
         { id: '5', title: 'Registrar Veículo', icon: 'book-open-page-variant' , pagina: "registro"},
-        { id: '6', icon: 'book-open-page-variant', image: require("../../assets/maoflor.png") },
+        { id: '6', title: 'Calculo Manual', icon: 'calculator' },
     ];
 
     return (
@@ -89,7 +89,7 @@ const style = StyleSheet.create({
         elevation: 5,
     },
     text: {
-        fontSize: 16,
+        fontSize: 20,
         fontWeight: 'bold',
         textAlign: 'center',
     },

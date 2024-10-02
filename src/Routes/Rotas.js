@@ -7,16 +7,23 @@ import { AuthContext } from '../Context/AuthContext';
 
 import Inicial from '../Pages/Inicial';
 import Registro from '../Pages/Registro'
+<<<<<<< HEAD
 import Sobrenos from '../Pages/Sobrenos'
 
+=======
+import Sobre from '../Pages/Sobrenos'
+>>>>>>> 14f3e1f78f93ce69f7fb64668ef105177a7c5bdf
 import Cadastro from '../Pages/Cadastro'
 import Login from '../Pages/Login';
 import { Text } from 'react-native';
 
 
-const Tab = createBottomTabNavigator();
+
 
 export default function Rotas() {
+
+
+    
 
     const { logado,cadastro, action } = useContext(AuthContext);
 
@@ -33,7 +40,11 @@ export default function Rotas() {
 
 
     if( action == "sobre" ) {
+<<<<<<< HEAD
         return( < Sobrenos/> )
+=======
+        return( < Sobre/> )
+>>>>>>> 14f3e1f78f93ce69f7fb64668ef105177a7c5bdf
     }
 
         if(action == "registro"){
