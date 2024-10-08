@@ -22,10 +22,10 @@ export default function Rotas() {
 
     const { logado,cadastro, action } = useContext(AuthContext);
 
-   /* if (!logado && !cadastro) {
+   if (!logado && !cadastro) {
         return (<Login />)
     }
-    if(!logado && cadastro){
+    /* if(!logado && cadastro){
         return(< Cadastro/>)
     }*/
 
