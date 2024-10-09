@@ -7,47 +7,67 @@ import { AuthContext } from '../Context/AuthContext';
 
 import Inicial from '../Pages/Inicial';
 import Registro from '../Pages/Registro'
-<<<<<<< HEAD
-import Sobrenos from '../Pages/Sobrenos'
-
-=======
-import Sobre from '../Pages/Sobrenos'
->>>>>>> 14f3e1f78f93ce69f7fb64668ef105177a7c5bdf
+import TelaFrota from '../Pages/TelaFrota'
+import RelatorioCaminhao from '../Pages/RelatorioCaminhao'
+import Calculo from '../Pages/CalculoManual'
 import Cadastro from '../Pages/Cadastro'
+
+
+import Sobre from '../Pages/Sobrenos'
+
+/*import Cadastro from '../Pages/Cadastro'*/
 import Login from '../Pages/Login';
-import { Text } from 'react-native';
+
 
 
 export default function Rotas() {
 
 
-    
 
-    const { logado,cadastro, action } = useContext(AuthContext);
 
-   if (!logado && !cadastro) {
+    const { logado, cadastro, action } = useContext(AuthContext);
+
+    if (!logado && action == "home") {
         return (<Login />)
     }
-    /* if(!logado && cadastro){
-        return(< Cadastro/>)
-    }*/
+    if (!logado && action == "cadastro") {
+        return (< Cadastro />)
+    }
 
-    if( action == "home" ) {
-        return( <Inicial /> )
+    if (action == "home") {
+        return (<Inicial />)
     }
 
 
-    if( action == "sobre" ) {
-<<<<<<< HEAD
-        return( < Sobrenos/> )
-=======
-        return( < Sobre/> )
->>>>>>> 14f3e1f78f93ce69f7fb64668ef105177a7c5bdf
+    if (action == "sobre") {
+
+
+        return (< Sobre />)
+
     }
 
-        if(action == "registro"){
-            return(< Registro/>)
-        }
+    if (action == "registro") {
+        return (< Registro />)
+    }
 
-       
+
+
+    if (action == "relatoriocaminhao") {
+        return (< RelatorioCaminhao />)
+    }
+
+    if (action == "TelaFrota") {
+        return (< TelaFrota />)
+    }
+
+    if (action == "calculo") {
+        return (< Calculo />)
+    }
+
+    if (action == "cadastro") {
+        return (< Cadastro />)
+    }
+
+
+
 }
