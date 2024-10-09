@@ -4,6 +4,7 @@ import { AuthContext } from '../Context/AuthContext';
 
 
 
+
 export default function Login({}) {
 
 
@@ -20,7 +21,7 @@ export default function Login({}) {
 
     return (
         <ScrollView contentContainerStyle={css.container}>
-
+  
         
             
             <TextInput
@@ -128,5 +129,10 @@ const css = StyleSheet.create({
     errorText: {
         color: "white",
         textAlign: "center"
+    },
+    image:{
+        width: '100%', // Para que a imagem ocupe toda a largura disponível
+        height: 150,   // Defina a altura da imagem
+        marginBottom: 20, // Espaço abaixo da imagem
     }
 });
