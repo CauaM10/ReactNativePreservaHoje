@@ -4,7 +4,6 @@ import { View, Text, StyleSheet, TouchableOpacity, FlatList, Image } from "react
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { AuthContext } from "../Context/AuthContext";
 
-
 export default function Inicial({navigation}) {
 
     const { setAction } = useContext(AuthContext);
@@ -43,7 +42,6 @@ export default function Inicial({navigation}) {
 }
 
 const style = StyleSheet.create({
-
     header: {
         width: "100%",
         height: 230,
@@ -56,13 +54,13 @@ const style = StyleSheet.create({
         borderBottomLeftRadius: 15,
         zIndex: -1
     },
-
     headerText: {
         color: "black",
         textAlign: "left",
         marginLeft: "20px",
-        marginTop: "30px"
-
+        marginTop: "30px",
+        fontSize: 20,
+        padding: 30,
     },
     container: {
         position: "absolute",
@@ -71,7 +69,6 @@ const style = StyleSheet.create({
         bottom: 0,
         padding: 20,
         zIndex: 1
-
     },
     item: {
         flex: 1,
@@ -93,19 +90,15 @@ const style = StyleSheet.create({
         fontWeight: 'bold',
         textAlign: 'center',
     },
-
-
     itemTitle: {
         fontSize: 16,
     },
-
     title: {
         fontSize: 24,
         fontWeight: 'bold',
         marginBottom: 20,
         textAlign: 'center',
     },
-
     iconContainer: {
         width: 40,
         height: 40,
@@ -113,19 +106,11 @@ const style = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         marginBottom: 10,
-
     },
     image: {
         width: "100%",
         height: "100%",
         resizeMode: "cover"
-
-
-
-    }
-
-
-
-
-
+    },
+    
 })

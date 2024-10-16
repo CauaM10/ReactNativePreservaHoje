@@ -6,7 +6,6 @@ import { AuthContext } from '../Context/AuthContext';
 export default function Inserir() {
 
   const { setCadastro } = useContext (AuthContext)
-
   const [email, setEmail] = useState("");
   const [telefone, setTelefone] = useState("")
   const [nome, setNome] = useState("")
@@ -44,7 +43,6 @@ export default function Inserir() {
         </>
         :
         <>
-
           <TextInput
             inputMode="text"
             placeholder="name"
@@ -52,8 +50,6 @@ export default function Inserir() {
             value={nome}
             onChangeText={(digitado) => setNome(digitado)}
             placeholderTextColor="white"
-
-
           />
           <TextInput
             inputMode="email"
@@ -63,8 +59,6 @@ export default function Inserir() {
             onChangeText={(digitado) => setEmail(digitado)}
             placeholderTextColor="white"
           />
-
-          
           <TextInput
             inputMode="text"
             placeholder="telefone"
@@ -72,8 +66,6 @@ export default function Inserir() {
             value={telefone}
             onChangeText={(digitado) => setTelefone(digitado)}
             placeholderTextColor="white"
-
-
           />
             <TextInput
             inputMode="password"
@@ -82,16 +74,11 @@ export default function Inserir() {
             value={senha}
             onChangeText={(digitado) => setSenha(digitado)}
             placeholderTextColor="white"
-
-
           />
-
-
           <TouchableOpacity style={css.btnCadastrar} onPress={Cadastro}>
             <Text style={css.btnCadastrarText}>Cadastrar</Text>
           </TouchableOpacity>
           <TouchableOpacity onPress={() => setCadastro( false ) } style={css.btnLogin}><Text style={css.btnLoginText}>VOLTAR PARA O LOGIN</Text></TouchableOpacity>
-
           {erro &&
             <View style={css.erro}>
               <Text style={css.erroText}>Revise os campos. Tente novamente!</Text>
@@ -99,11 +86,7 @@ export default function Inserir() {
           }
         </>
       }
-      
-
-
     </ScrollView>
-
   )
 }
 
@@ -160,12 +143,11 @@ const css = StyleSheet.create({
     marginTop: 15,
     backgroundColor: "#262626"
   },
-
-    btnLoginText: {
-      color: "white",
-      lineHeight: 45,
-      textAlign: "center",
-      fontSize: 15,
-      fontWeight: "bold"
+  btnLoginText: {
+    color: "white",
+    lineHeight: 45,
+    textAlign: "center",
+    fontSize: 15,
+    fontWeight: "bold"
   },
 })
