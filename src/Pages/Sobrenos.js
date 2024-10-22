@@ -1,30 +1,22 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { View, Text, TouchableOpacity, Switch, StyleSheet, ActivityIndicator, Image, Animated, Dimensions, Easing } from 'react-native';
+import { View, Text, TouchableOpacity, Switch, StyleSheet, Image, Animated, Dimensions, Easing } from 'react-native';
 
 const TABS = ['Sobre Nós', 'Serviços', 'Objetivo'];
-const INITIAL_TEXTS = [
+const TEXTS = [
   'Texto inicial - Sobre Nós',
   'Texto inicial - Serviços',
   'Texto inicial - Objetivo',
 ];
-const API_RESPONSES = [
-  'Atualização: A PreservaHoje é referência no transporte sustentável.',
-  'Atualização: Serviços completos para gestão de emissões em tempo real.',
-  'Atualização: Nosso objetivo é a inovação em sustentabilidade logística.',
-];
 
 const App = () => {
   const [tabIndex, setTabIndex] = useState(0);
-  const [textos, setTextos] = useState(INITIAL_TEXTS);
   const [isNotificationEnabled, setNotificationEnabled] = useState(false);
-  const [loading, setLoading] = useState(false);
   
   const windowWidth = Dimensions.get('window').width;
   const animation = useRef(new Animated.Value(0)).current;
   const opacityAnim = useRef(new Animated.Value(1)).current; 
 
   useEffect(() => {
-    
     const tabWidth = windowWidth / TABS.length;
     const textOffset = (tabWidth - 80) / 2 + 5; 
     Animated.timing(animation, {
@@ -34,7 +26,6 @@ const App = () => {
       useNativeDriver: false,
     }).start();
 
-  
     Animated.sequence([
       Animated.timing(opacityAnim, {
         toValue: 0,
@@ -49,71 +40,34 @@ const App = () => {
     ]).start();
   }, [tabIndex]);
 
- 
-  const fetchTextFromAPI = async (index) => {
-    setLoading(true);
-    try {
-      const response = await new Promise((resolve) =>
-        setTimeout(() => {
-          resolve({ data: API_RESPONSES[index] });
-        }, 1500)
-      );
-
-      const newTextsArray = [...textos];
-      newTextsArray[index] = response.data;
-      setTextos(newTextsArray);
-    } catch (error) {
-      console.error('Erro ao buscar o texto:', error);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  // Handle tab switch and text fetching
-  const handleTabSwitch = async (index) => {
+  const handleTabSwitch = (index) => {
     setTabIndex(index);
-    await fetchTextFromAPI(index);
   };
 
-  // Toggle notification switch
   const toggleNotification = () => {
     setNotificationEnabled((prevState) => !prevState);
   };
 
   return (
     <View style={styles.container}>
-    
       <HeaderImage source={require('../../assets/caminhao.jpg')} />
-
- 
       <TabNavigation 
         tabs={TABS}
         activeIndex={tabIndex}
         onTabPress={handleTabSwitch}
         animation={animation}
       />
-
-    
       <Animated.View style={[styles.textContainer, { opacity: opacityAnim }]}>
-        {loading ? (
-          <ActivityIndicator size="large" color="#4CAF50" />
-        ) : (
-          <Text style={styles.text}>{textos[tabIndex]}</Text>
-        )}
+        <Text style={styles.text}>{TEXTS[tabIndex]}</Text>
       </Animated.View>
-
-     
       <NotificationSwitch 
         isEnabled={isNotificationEnabled}
         toggleSwitch={toggleNotification}
       />
-
-    
       <Footer />
     </View>
   );
 };
-
 
 const HeaderImage = ({ source }) => (
   <View style={styles.imageContainer}>
@@ -121,11 +75,10 @@ const HeaderImage = ({ source }) => (
   </View>
 );
 
-
 const TabNavigation = ({ tabs, activeIndex, onTabPress, animation }) => {
   const windowWidth = Dimensions.get('window').width;
   const tabWidth = windowWidth / tabs.length;
-  const underlineWidth = 80; // Fixar a largura da linha
+  const underlineWidth = 80;
 
   return (
     <View>
@@ -145,7 +98,6 @@ const TabNavigation = ({ tabs, activeIndex, onTabPress, animation }) => {
         ))}
       </View>
 
-     
       <Animated.View 
         style={[styles.underline, { 
           width: underlineWidth, 
