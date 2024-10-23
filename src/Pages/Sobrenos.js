@@ -85,6 +85,7 @@ const TabNavigation = ({ tabs, activeIndex, onTabPress, animation }) => {
   const tabWidth = windowWidth / tabs.length;
   const underlineWidth = 80;
 
+
   return (
     <View>
       <View style={styles.tabContainer}>

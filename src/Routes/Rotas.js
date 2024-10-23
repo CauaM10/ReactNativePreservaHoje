@@ -25,7 +25,7 @@ export default function Rotas() {
 
 
 
-    const { logado, cadastro, action } = useContext(AuthContext);
+    const { logado, cadastro, action, globalId } = useContext(AuthContext);
 
     if (!logado && action == "home") {
         return (<Login />)
@@ -52,8 +52,8 @@ export default function Rotas() {
 
 
 
-    if (action == "relatoriocaminhao") {
-        return (< RelatorioCaminhao />)
+    if (action == "RelatorioCaminhao") {
+        return (< RelatorioCaminhao id={globalId} />)
     }
 
     if (action == "TelaFrota") {
