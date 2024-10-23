@@ -16,7 +16,6 @@ import foto from '..//../assets/maoflor.png'
 import { AuthContext } from '../Context/AuthContext';
 import Ionicons from '@expo/vector-icons/Ionicons';
 
-
 // Componente de Seletor Independente
 const DropdownSelector = ({ title, apiUrl, selectedOption, onSelect }) => {
   const [options, setOptions] = useState([]);
@@ -32,7 +31,6 @@ const DropdownSelector = ({ title, apiUrl, selectedOption, onSelect }) => {
   const dropdownHeight = useRef(new Animated.Value(0)).current;
   const dropdownOpacity = useRef(new Animated.Value(0)).current;
 
-
   // Buscar opções da API quando o componente for montado
   useEffect(() => {
     const fetchOptions = async () => {
@@ -47,7 +45,6 @@ const DropdownSelector = ({ title, apiUrl, selectedOption, onSelect }) => {
         setLoading(false);
       }
     };
-
     fetchOptions();
   }, [apiUrl]);
 
@@ -85,11 +82,6 @@ const DropdownSelector = ({ title, apiUrl, selectedOption, onSelect }) => {
 
   return (
     <View style={styles.dropdownContainer}>
-
-
-    
-
-      
       <Text style={styles.selectorTitle}>{title}</Text>
       <TouchableOpacity onPress={toggleDropdown} style={styles.inputField}>
         <Text style={styles.inputText}>
@@ -100,7 +92,6 @@ const DropdownSelector = ({ title, apiUrl, selectedOption, onSelect }) => {
             : "Clique para selecionar uma opção"}
         </Text>
       </TouchableOpacity>
-
       {dropdownVisible && (
         <Animated.View style={[styles.dropdown, { height: dropdownHeight, opacity: dropdownOpacity }]}>
           <ScrollView>
@@ -187,9 +178,6 @@ const FormScreen = () => {
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
       <View style={styles.container}>
-        
-  
-
       <Pressable onPress={() => setAction('home')} style = {styles.volt}><Ionicons name="arrow-back" size={32} color="green" /></Pressable>
         {/* Título no topo */}
         <Text style={styles.headerTitle}>Registro de Veículo</Text>
@@ -276,7 +264,6 @@ const FormScreen = () => {
           >
             <Text style={styles.buttonText}>Continuar</Text>
           </TouchableOpacity>
-
           <TouchableOpacity 
             style={[styles.button, styles.backButton]} 
             onPress={handleBack}
@@ -297,7 +284,6 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     justifyContent: 'flex-start', // Alinha o conteúdo ao topo
     marginTop:50,
-
   },
   headerTitle: {
     fontSize: 28,
@@ -431,21 +417,18 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     fontSize: 16,
   },
-
   image: {
     width: '100%', // Para que a imagem ocupe toda a largura disponível
     height: 150,   // Defina a altura da imagem
     marginBottom: 20, // Espaço abaixo da imagem
-},
-
-volt: {
-  position: 'absolute', // Torna o posicionamento absoluto
-  top: 10,              // Posiciona o Pressable 10 unidades abaixo do topo da tela
-  left: 0,             // Posiciona o Pressable 10 unidades à direita da borda esquerda
-  padding: 10,          // Adiciona preenchimento interno
-  borderRadius: 5,      // Bordas arredondadas
-},
-
+  },
+  volt: {
+    position: 'absolute', // Torna o posicionamento absoluto
+    top: 10,              // Posiciona o Pressable 10 unidades abaixo do topo da tela
+    left: 0,             // Posiciona o Pressable 10 unidades à direita da borda esquerda
+    padding: 10,          // Adiciona preenchimento interno
+    borderRadius: 5,      // Bordas arredondadas
+  },
 });
 
 export default FormScreen;

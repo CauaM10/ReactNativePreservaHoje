@@ -1,45 +1,38 @@
+
 import React, { useState, useContext, useEffect, useRef } from 'react';
 import { View, Text, TouchableOpacity, Switch, StyleSheet, ActivityIndicator, Image, Animated, Dimensions, Easing, Pressable } from 'react-native';
 import FontAwesome6 from '@expo/vector-icons/FontAwesome6';
 import { AuthContext } from '../Context/AuthContext';
 
-// Constants
+
+
 const TABS = ['Sobre Nós', 'Serviços', 'Objetivo'];
-const INITIAL_TEXTS = [
+const TEXTS = [
   'Texto inicial - Sobre Nós',
   'Texto inicial - Serviços',
   'Texto inicial - Objetivo',
-];
-const API_RESPONSES = [
-  'Atualização: A PreservaHoje é referência no transporte sustentável.',
-  'Atualização: Serviços completos para gestão de emissões em tempo real.',
-  'Atualização: Nosso objetivo é a inovação em sustentabilidade logística.',
 ];
 
 const App = () => {
 
 
   const [tabIndex, setTabIndex] = useState(0);
-  const [textos, setTextos] = useState(INITIAL_TEXTS);
   const [isNotificationEnabled, setNotificationEnabled] = useState(false);
-  const [loading, setLoading] = useState(false);
   
   const windowWidth = Dimensions.get('window').width;
   const animation = useRef(new Animated.Value(0)).current;
-  const opacityAnim = useRef(new Animated.Value(1)).current; // Para a opacidade do texto
+  const opacityAnim = useRef(new Animated.Value(1)).current; 
 
   useEffect(() => {
-    // Animate the underline when the tab index changes
     const tabWidth = windowWidth / TABS.length;
-    const textOffset = (tabWidth - 80) / 2 + 5; // Ajuste ligeiramente à direita
+    const textOffset = (tabWidth - 80) / 2 + 5; 
     Animated.timing(animation, {
       toValue: tabIndex * tabWidth + textOffset,
-      duration: 400, // Animação suave
+      duration: 400, 
       easing: Easing.inOut(Easing.ease),
       useNativeDriver: false,
     }).start();
 
-    // Suavização da transição de opacidade ao mudar de aba
     Animated.sequence([
       Animated.timing(opacityAnim, {
         toValue: 0,
@@ -54,83 +47,45 @@ const App = () => {
     ]).start();
   }, [tabIndex]);
 
-  // Async function to simulate API request for tab text updates
-  const fetchTextFromAPI = async (index) => {
-    setLoading(true);
-    try {
-      const response = await new Promise((resolve) =>
-        setTimeout(() => {
-          resolve({ data: API_RESPONSES[index] });
-        }, 1500)
-      );
-
-      const newTextsArray = [...textos];
-      newTextsArray[index] = response.data;
-      setTextos(newTextsArray);
-    } catch (error) {
-      console.error('Erro ao buscar o texto:', error);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  // Handle tab switch and text fetching
-  const handleTabSwitch = async (index) => {
+  const handleTabSwitch = (index) => {
     setTabIndex(index);
-    await fetchTextFromAPI(index);
   };
 
-  // Toggle notification switch
   const toggleNotification = () => {
     setNotificationEnabled((prevState) => !prevState);
   };
 
   return (
     <View style={styles.container}>
-      {/* Image Header */}
       <HeaderImage source={require('../../assets/caminhao.jpg')} />
-
-      {/* Tab Navigation */}
       <TabNavigation 
         tabs={TABS}
         activeIndex={tabIndex}
         onTabPress={handleTabSwitch}
         animation={animation}
       />
-
-      {/* Descriptive Text */}
       <Animated.View style={[styles.textContainer, { opacity: opacityAnim }]}>
-        {loading ? (
-          <ActivityIndicator size="large" color="#4CAF50" />
-        ) : (
-          <Text style={styles.text}>{textos[tabIndex]}</Text>
-        )}
+        <Text style={styles.text}>{TEXTS[tabIndex]}</Text>
       </Animated.View>
-
-      {/* Notification Switch */}
       <NotificationSwitch 
         isEnabled={isNotificationEnabled}
         toggleSwitch={toggleNotification}
       />
-
-      {/* Footer */}
       <Footer />
     </View>
   );
 };
 
-// Header Image Component
 const HeaderImage = ({ source }) => (
   <View style={styles.imageContainer}>
     <Image style={styles.image} source={source} />
   </View>
 );
 
-// Tab Navigation Component
 const TabNavigation = ({ tabs, activeIndex, onTabPress, animation }) => {
   const windowWidth = Dimensions.get('window').width;
   const tabWidth = windowWidth / tabs.length;
-  const underlineWidth = 80; // Fixar a largura da linha
+  const underlineWidth = 80;
 
 
   return (
@@ -151,7 +106,6 @@ const TabNavigation = ({ tabs, activeIndex, onTabPress, animation }) => {
         ))}
       </View>
 
-      {/* Animated Underline */}
       <Animated.View 
         style={[styles.underline, { 
           width: underlineWidth, 
@@ -162,7 +116,6 @@ const TabNavigation = ({ tabs, activeIndex, onTabPress, animation }) => {
   );
 };
 
-// Notification Switch Component
 const NotificationSwitch = ({ isEnabled, toggleSwitch }) => (
   <View style={styles.notificationButton}>
     <Text style={styles.notificationText}>Receba Notificação</Text>
@@ -175,6 +128,7 @@ const NotificationSwitch = ({ isEnabled, toggleSwitch }) => (
     />
   </View>
 );
+
 
 // Footer Component
  
@@ -191,7 +145,9 @@ const Footer = () => {
   );
 };
 
-// Stylesheet
+
+
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -200,7 +156,7 @@ const styles = StyleSheet.create({
   },
   imageContainer: {
     width: '100%',
-    height: 250, // Diminui o tamanho da imagem
+    height: 250, 
   },
   image: {
     width: '100%',
@@ -216,14 +172,15 @@ const styles = StyleSheet.create({
     backgroundColor: '#ffffff',
     paddingVertical: 10,
     elevation: 3,
-    bottom: 10
+    bottom: 10,
+    borderRadius: 5
   },
   tabButton: {
     paddingVertical: 10,
-    paddingHorizontal: 15, // Diminui o padding horizontal
+    paddingHorizontal: 15, 
   },
   tabTextActive: {
-    fontSize: 14, // Diminui a fonte para melhorar o alinhamento
+    fontSize: 14, 
     fontWeight: 'bold',
     color: '#4CAF50',
   },
@@ -235,12 +192,12 @@ const styles = StyleSheet.create({
     height: 3,
     backgroundColor: '#4CAF50',
     position: 'absolute',
-    bottom: 0,
+    bottom: 8,
     borderRadius: 2,
   },
   textContainer: {
     backgroundColor: '#ffffff',
-    padding: 15, // Compactar a caixa de texto
+    padding: 15, 
     borderRadius: 10,
     marginVertical: 15,
     width: '90%',
@@ -251,7 +208,7 @@ const styles = StyleSheet.create({
     elevation: 5,
   },
   text: {
-    fontSize: 16, // Diminui o tamanho da fonte
+    fontSize: 16, 
     color: '#333333',
     textAlign: 'justify',
   },
