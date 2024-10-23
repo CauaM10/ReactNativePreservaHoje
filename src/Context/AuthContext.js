@@ -3,9 +3,10 @@ import { createContext, useState } from "react";
 export const AuthContext = createContext(0);
 
 function AuthProvider({ children }) {
-    const [logado, setLogado] = useState(false);
+    const [logado, setLogado] = useState(true);
     const [error, setError] = useState(false);
     const [action, setAction ] = useState("home");
+    const [globalId, setGlobalId ] = useState();
 
     async function Login(email, senha) {
 
@@ -33,7 +34,7 @@ function AuthProvider({ children }) {
     }
 
     return (
-        <AuthContext.Provider value={{ logado: logado, setLogado: setLogado, Login, error: error, action: action, setAction: setAction }}>
+        <AuthContext.Provider value={{ logado: logado, setLogado: setLogado, Login, error: error, action: action, setAction: setAction, globalId: globalId, setGlobalId: setGlobalId}}>
             {children}
         </AuthContext.Provider>
     )
