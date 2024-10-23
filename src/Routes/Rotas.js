@@ -11,6 +11,7 @@ import TelaFrota from '../Pages/TelaFrota'
 import RelatorioCaminhao from '../Pages/RelatorioCaminhao'
 import Calculo from '../Pages/CalculoManual'
 import Cadastro from '../Pages/Cadastro'
+import ReduzirImpactos from '../Pages/ReduzirImpactos'
 
 
 import Sobre from '../Pages/Sobrenos'
@@ -58,6 +59,10 @@ export default function Rotas() {
 
     if (action == "TelaFrota") {
         return (< TelaFrota />)
+    }
+
+    if (action == "reduzirimpactos") {
+        return (< ReduzirImpactos />)
     }
 
     if (action == "calculo") {
