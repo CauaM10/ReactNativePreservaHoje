@@ -1,10 +1,17 @@
-import React, { useState, useEffect } from 'react';
-import { StyleSheet, View, Alert } from 'react-native';
-import { Button, TextInput, Provider as PaperProvider, Appbar, Text, Card, DefaultTheme } from 'react-native-paper';
+import React, { useState, useContext, useEffect } from 'react';
+import { StyleSheet, View, Alert, Image, Pressable } from 'react-native';
+import { Button, TextInput, Provider as PaperProvider, Text, Card, DefaultTheme } from 'react-native-paper';
 import axios from 'axios';
 import { MaterialIcons } from '@expo/vector-icons';
+import foto from '..//../assets/PreservaHj-risco.png';
+import Ionicons from '@expo/vector-icons/Ionicons';
+import { AuthContext } from '../Context/AuthContext';
+
+const MAX_DISTANCE = 10000; // Máximo de 10.000 km
+const MAX_CONSUMO = 1000; // Máximo de 1000 L/100km
 
 const CarbonEmissionCalculator = () => {
+  const { setAction } = useContext(AuthContext);
   const [distancia, setDistancia] = useState('');
   const [consumo, setConsumo] = useState('');
   const [combustivel, setCombustivel] = useState('diesel');
@@ -12,16 +19,33 @@ const CarbonEmissionCalculator = () => {
   const [isCalculable, setIsCalculable] = useState(false);
 
   useEffect(() => {
-    setIsCalculable(!!distancia && !!consumo);
+    // Verifica se os inputs são válidos e atualiza a habilitação do botão de cálculo
+    const distanciaNum = parseFloat(distancia);
+    const consumoNum = parseFloat(consumo);
+    setIsCalculable(
+      !isNaN(distanciaNum) && distanciaNum > 0 && distanciaNum <= MAX_DISTANCE &&
+      !isNaN(consumoNum) && consumoNum > 0 && consumoNum <= MAX_CONSUMO
+    );
   }, [distancia, consumo]);
 
+  const validateInput = (type) => {
+    const value = type === 'distancia' ? parseFloat(distancia) : parseFloat(consumo);
+    if (isNaN(value) || value <= 0) return;
+
+    if (type === 'distancia' && value > MAX_DISTANCE) {
+      Alert.alert('Erro', `A distância não pode ser maior que ${MAX_DISTANCE} km.`);
+    } else if (type === 'consumo' && value > MAX_CONSUMO) {
+      Alert.alert('Erro', `O consumo não pode ser maior que ${MAX_CONSUMO} L/100 km.`);
+    }
+  };
+
   const calcularEmissao = () => {
-    if (!distancia || !consumo) {
-      Alert.alert('Erro', 'Por favor, preencha todos os campos.');
+    if (!isValidInput()) {
+      Alert.alert('Erro', 'Por favor, preencha todos os campos corretamente.');
       return;
     }
 
-    const consumoDividido = consumo / 100;
+    const consumoDividido = parseFloat(consumo) / 100;
     let fatorEmissao;
 
     switch (combustivel) {
@@ -38,9 +62,18 @@ const CarbonEmissionCalculator = () => {
         fatorEmissao = 2.68;
     }
 
-    const emissaoCalculada = (distancia * consumoDividido * fatorEmissao).toFixed(2);
+    const emissaoCalculada = (parseFloat(distancia) * consumoDividido * fatorEmissao).toFixed(2);
     setEmissao(emissaoCalculada);
     enviarDadosParaAPI(distancia, consumo, combustivel, emissaoCalculada);
+  };
+
+  const isValidInput = () => {
+    const distanciaNum = parseFloat(distancia);
+    const consumoNum = parseFloat(consumo);
+    return (
+      !isNaN(distanciaNum) && distanciaNum > 0 && distanciaNum <= MAX_DISTANCE &&
+      !isNaN(consumoNum) && consumoNum > 0 && consumoNum <= MAX_CONSUMO
+    );
   };
 
   const enviarDadosParaAPI = async (distancia, consumo, combustivel, emissao) => {
@@ -54,13 +87,24 @@ const CarbonEmissionCalculator = () => {
     }
   };
 
+  const showHelp = () => {
+    Alert.alert(
+      'Instruções',
+      '1. Informe a distância percorrida (em km).\n' +
+      '2. Informe o consumo do veículo (em litros por Km).\n' +
+      '3. Selecione o tipo de combustível.\n' +
+      '4. Clique no botão de calcular para obter a emissão de CO2.',
+      [{ text: 'OK' }]
+    );
+  };
+
   const theme = {
     ...DefaultTheme,
     colors: {
       ...DefaultTheme.colors,
       primary: '#87CE57',
       underlineColor: '#87CE57',
-      text: '#000',
+      text: '#00000',
       placeholder: '#888',
     },
   };
@@ -68,89 +112,95 @@ const CarbonEmissionCalculator = () => {
   return (
     <PaperProvider theme={theme}>
       <View style={styles.container}>
-        <Appbar.Header style={styles.header}>
-          <Appbar.Content title="Calculadora de Emissão" />
-          <Appbar.Action icon="information" onPress={() => Alert.alert('Ajuda', 'Informe a distância e o consumo para calcular a emissão de carbono.')} />
-        </Appbar.Header>
+        <View style={styles.headerContainer}>
+          <Pressable onPress={() => { setAction('home'); }} style={styles.volt}>
+            <Ionicons name="arrow-back" size={32} color="green" />
+          </Pressable>
+          <Image
+            source={foto}
+            style={styles.image}
+            resizeMode="contain"
+          />
+          <Text style={styles.title}>Calculadora de Emissão</Text>
+        </View>
 
-        <Card style={styles.card}>
-          <Card.Content>
-            <View style={styles.resultContainer}>
-              <Text style={styles.result}>
-                {emissao !== null ? `Emissão: ${emissao} kg CO2` : 'Resultado aqui'}
-              </Text>
-            </View>
-
-            <TextInput
-              label="Distância (km)"
-              value={distancia}
-              onChangeText={setDistancia}
-              keyboardType="numeric"
-              style={styles.input}
-              activeUnderlineColor="#87CE57"
-              selectionColor="#87CE57"
-              mode="outlined"
-            />
-
-            <TextInput
-              label="Consumo (L)"
-              value={consumo}
-              onChangeText={setConsumo}
-              keyboardType="numeric"
-              style={styles.input}
-              activeUnderlineColor="#87CE57"
-              selectionColor="#87CE57"
-              mode="outlined"
-            />
-
-            <View style={styles.buttonGroup}>
-              <Button
-                mode={combustivel === 'diesel' ? 'contained' : 'outlined'}
-                onPress={() => setCombustivel('diesel')}
-                style={styles.fuelButton}
-              >
-                Diesel
-              </Button>
-              <Button
-                mode={combustivel === 'gasolina' ? 'contained' : 'outlined'}
-                onPress={() => setCombustivel('gasolina')}
-                style={styles.fuelButton}
-              >
-                Gasolina
-              </Button>
-              <Button
-                mode={combustivel === 'etanol' ? 'contained' : 'outlined'}
-                onPress={() => setCombustivel('etanol')}
-                style={styles.fuelButton}
-              >
-                Etanol
-              </Button>
-            </View>
-
-            <View style={[styles.calcButtonsContainer, { width: 60 , marginLeft:20 }]}>
-              <View style={styles.row}>
-                {/* Botões sem funcionalidade */}
-                <Button mode="outlined" style={[styles.iconButton, { width: 60 }]}>
-                  <MaterialIcons name="local-shipping" size={12} color="#87CE57" />
-                </Button>
-                <Button mode="outlined" style={[styles.iconButton, { width: 60 }]}>
-                  <MaterialIcons name="eco" size={12} color="#87CE57" />
-                </Button>
-
-                {/* Botão de resultado */}
+        <View style={styles.calculatorContainer}>
+          <Card style={styles.card}>
+            <Card.Content>
+              <View style={styles.resultContainer}>
                 <Button
-                  mode={isCalculable ? 'contained' : 'outlined'}
-                  onPress={isCalculable ? calcularEmissao : null}
-                  style={[styles.calcButton, { backgroundColor: isCalculable ? '#87CE57' : '#ccc', width: 100 }]}
+                  icon="information"
+                  onPress={showHelp}
+                  style={styles.helpButton}
+                  labelStyle={styles.helpButtonLabel}
+                />
+                <Text style={styles.result}>
+                  {emissao !== null ? `Emissão: ${emissao} kg CO2` : 'Resultado aqui'}
+                </Text>
+              </View>
+
+              <TextInput
+                label="Distância (km)"
+                value={distancia}
+                onChangeText={setDistancia}
+                onBlur={() => validateInput('distancia')}
+                keyboardType="numeric"
+                style={styles.input}
+                activeUnderlineColor="#87CE57"
+                selectionColor="#87CE57"
+                mode="outlined"
+              />
+
+              <TextInput
+                label="Consumo (p/km)"
+                value={consumo}
+                onChangeText={setConsumo}
+                onBlur={() => validateInput('consumo')}
+                keyboardType="numeric"
+                style={styles.input}
+                activeUnderlineColor="#87CE57"
+                selectionColor="#87CE57"
+                mode="outlined"
+              />
+
+              <Text style={styles.fuelLabel}>Combustível</Text>
+              <View style={styles.buttonGroup}>
+                <Button
+                  mode={combustivel === 'diesel' ? 'contained' : 'outlined'}
+                  onPress={() => setCombustivel('diesel')}
+                  style={styles.fuelButton}
+                >
+                  Diesel
+                </Button>
+                <Button
+                  mode={combustivel === 'gasolina' ? 'contained' : 'outlined'}
+                  onPress={() => setCombustivel('gasolina')}
+                  style={styles.fuelButton}
+                >
+                  Gasolina
+                </Button>
+                <Button
+                  mode={combustivel === 'etanol' ? 'contained' : 'outlined'}
+                  onPress={() => setCombustivel('etanol')}
+                  style={styles.fuelButton}
+                >
+                  Etanol
+                </Button>
+              </View>
+
+              <View style={styles.calcButtonContainer}>
+                <Button
+                  mode="contained"
+                  onPress={calcularEmissao}
+                  style={[styles.calcButton, { backgroundColor: isCalculable ? '#87CE57' : '#ccc', width: '100%' }]}
                   disabled={!isCalculable}
                 >
                   <MaterialIcons name="assignment" size={20} color="#fff" />
                 </Button>
               </View>
-            </View>
-
-          </Card.Content>
-        </Card>
+            </Card.Content>
+          </Card>
+        </View>
       </View>
     </PaperProvider>
   );
@@ -159,11 +209,60 @@ const CarbonEmissionCalculator = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 16,
-    backgroundColor: '#f5f5f5',
+    width: "100%",
+    height: "100%",
   },
-  header: {
-    backgroundColor: '#87CE57',
+  headerContainer: {
+    width: "100%",
+    height: "40%",
+    backgroundColor: "#87CE57",
+    borderBottomRightRadius: 150,
+    justifyContent: 'flex-end',
+    alignItems: 'center',
+    paddingBottom: 20,
+    position: 'relative',
+  },
+  logo: {
+    width: 100,
+    height: 100,
+    marginBottom: 10,
+  },
+  title: {
+    fontSize: 21,
+    fontWeight: '700',
+    color: '#fff',
+    marginBottom: 50,
+    textAlign: 'center',
+  },
+  helpButton: {
+    position: 'absolute',
+    top: -20,
+    left:-185,
+    backgroundColor: 'white', // Cor de fundo com transparênci
+    
+    borderRadius: 10, // torna o botão circular
+    justifyContent: 'center', // centraliza o texto verticalmente
+    alignItems: 'center', // centraliza o texto horizontalmente
+    shadowColor: '#000', // cor da sombra
+    shadowOffset: { width: 0, height: 2 }, // deslocamento da sombra
+    shadowOpacity: 0.3, // opacidade da sombra
+    shadowRadius: 3, // suavização da sombra
+    elevation: 5, // elevação para Android
+   
+  },
+  helpButtonLabel: {
+    color: "#87CE57", // Cor do texto do botão
+    justifyContent: 'center', // centraliza o texto verticalmente
+    alignItems: 'center', // centraliza o texto horizontalmente
+    marginLeft:10
+  },
+  calculatorContainer: {
+    width: "100%",
+    height: "60%",
+    justifyContent: 'flex-start',
+    padding: 16,
+    position: "absolute",
+    bottom: 75,
   },
   card: {
     padding: 20,
@@ -191,9 +290,11 @@ const styles = StyleSheet.create({
     marginLeft: 150,
   },
   result: {
-    fontSize: 18,
+    fontSize: 16,
     fontWeight: 'bold',
     color: '#87CE57',
+    textAlign: "center",
+    paddingRight: 8,
   },
   input: {
     backgroundColor: '#ffffff',
@@ -202,10 +303,10 @@ const styles = StyleSheet.create({
     paddingHorizontal: 15,
     marginBottom: 8,
   },
-  label: {
-    marginTop: 16,
+  fuelLabel: {
+    marginVertical: 8,
     fontSize: 16,
-    fontWeight: '600',
+    fontWeight: 'bold',
     color: '#333',
   },
   buttonGroup: {
@@ -213,38 +314,32 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     marginVertical: 8,
   },
-  calcButtonsContainer: {
+  calcButtonContainer: {
     marginTop: 16,
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-  },
-  row: {
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-  iconButton: {
-    borderRadius: 10,
-    borderColor: '#87CE57',
-    borderWidth: 1,
-    backgroundColor: '#fff',
-    height: 55,
     justifyContent: 'center',
-    alignItems: 'center',
-    elevation: 2,
-    marginRight: 8,
   },
   calcButton: {
-    height: 90,
+    height: 60,
     borderRadius: 10,
     justifyContent: 'center',
     flexDirection: 'row',
     alignItems: 'center',
     paddingHorizontal: 10,
   },
-  calcButtonText: {
-    color: '#fff',
-    marginLeft: 5,
+  image: {
+    width: '100%',
+    height: 200, // Ajuste a altura conforme necessário
+    resizeMode: 'cover', // Mantém a proporção da imagem
+    position: "absolute",
+    top: 50,
+  },
+  volt: {
+    position: 'absolute', // Torna o posicionamento absoluto
+    top: 45,              // Posiciona o Pressable 10 unidades abaixo do topo da tela
+    left: 5,             // Posiciona o Pressable 10 unidades à direita da borda esquerda
+    padding: 10,          // Adiciona preenchimento interno
+    borderRadius: 5,
+    zIndex: 1  // Bordas arredondadas
   },
 });
 
