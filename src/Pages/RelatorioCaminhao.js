@@ -1,13 +1,15 @@
 import React, { useEffect, useState, useContext } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, Image, Pressable } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, Image, Pressable, Dimensions } from 'react-native';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import { AuthContext } from '../Context/AuthContext';
+import { PieChart } from 'react-native-chart-kit';
 
-const TruckDetails = ({id}) => {
+const TruckDetails = ({ id }) => {
   const { setAction } = useContext(AuthContext);
   const [vehicles, setVehicles] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [emissionLevel, setEmissionLevel] = useState(0); // Nível de emissão (0 a 100)
 
   const getVeiculo = async () => {
     try {
@@ -19,6 +21,10 @@ const TruckDetails = ({id}) => {
       });
       const json = await response.json();
       setVehicles(json);
+
+      // Supondo que a emissão esteja presente nos dados retornados
+      const emissao = json?.emissao ?? 20; // Coloque um valor padrão de 50 se a emissão não for encontrada
+      setEmissionLevel(emissao);
     } catch (err) {
       setError(err.message);
     } finally {
@@ -37,13 +43,24 @@ const TruckDetails = ({id}) => {
   if (error) {
     return <Text>Error: {error}</Text>;
   }
-  
+
+  // Função para determinar o nível de emissão
+  const getEmissionStatus = () => {
+    if (emissionLevel <= 33) {
+      return 'Baixa';
+    } else if (emissionLevel <= 66) {
+      return 'Moderada';
+    } else {
+      return 'Alta';
+    }
+  };
+
   const item = vehicles;
+
   return (
     <View style={styles.container}>
       <View style={styles.header}>
-        <TouchableOpacity style={styles.backButton}>
-        </TouchableOpacity>
+        <TouchableOpacity style={styles.backButton}></TouchableOpacity>
         <Pressable onPress={() => setAction('TelaFrota')} style={styles.volt}>
           <Ionicons name="arrow-back" size={32} color="green" />
         </Pressable>
@@ -52,13 +69,56 @@ const TruckDetails = ({id}) => {
           <Text style={styles.profileIconText}>👤</Text>
         </View>
       </View>
+
+      {/* Gráfico de Emissão no estilo Gauge */}
       <View style={styles.emissionCard}>
-        <View style={styles.emissionCircle}>
-          <Text style={styles.emissionCircleText}>Leve</Text>
+        <View style={styles.pieWrapper}>
+          <PieChart
+            data={[
+              {
+                name: 'Emissão',
+                population: emissionLevel, // Nível de emissão
+                color: emissionLevel <= 33 ? '#4CAF50' : emissionLevel <= 66 ? '#FFD700' : '#FF6347',
+                legendFontColor: '#333333',
+                legendFontSize: 15,
+              },
+              {
+                name: 'Restante',
+                population: 100 - emissionLevel,
+                color: '#F0F0F0',
+                legendFontColor: '#333333',
+                legendFontSize: 15,
+              },
+            ]}
+            width={Dimensions.get('window').width - 40}
+            height={220}
+            chartConfig={{
+              backgroundColor: '#FFFFFF',
+              backgroundGradientFrom: '#FFFFFF',
+              backgroundGradientTo: '#FFFFFF',
+              decimalPlaces: 0, // Sem casas decimais
+              color: (opacity = 1) => `rgba(0, 0, 0, ${opacity})`,
+            }}
+            accessor={'population'}
+            backgroundColor={'transparent'}
+            paddingLeft={'92'}
+            hasLegend={false} // Remove legenda
+            absolute // Mostra valor no gráfico
+          />
+
+          {/* Círculo transparente no centro para simular o buraco */}
+          <View style={styles.innerCircle}></View>
+
+          {/* Texto no centro do gráfico */}
+          <View style={styles.centeredText}>
+            <Text style={styles.emissionStatusText}>{getEmissionStatus()}</Text>
+            <Text style={styles.emissionPercentageText}>{emissionLevel}%</Text>
+          </View>
         </View>
-        <Text style={styles.emissionText}>Emissão do dia</Text>
       </View>
-      <Image source={{uri: item.modelo.foto}} style={styles.truckImage} />
+
+      <Image source={{ uri: item.modelo.foto }} style={styles.truckImage} />
+
       <View style={styles.truckInfo}>
         <Image source={require('../../assets/IconeCarro.png')} style={styles.scaniaLogo} />
         {item.modelo.modeloVeiculo && <Text style={styles.vehicleName}>{item.modelo.modeloVeiculo}</Text>}
@@ -76,9 +136,9 @@ const TruckDetails = ({id}) => {
       <TouchableOpacity style={styles.reportButton}>
         <Text style={styles.reportButtonText}>Relatório Individual</Text>
       </TouchableOpacity>
-
     </View>
-  )};
+  );
+};
 
 const styles = StyleSheet.create({
   container: {
@@ -119,7 +179,7 @@ const styles = StyleSheet.create({
     color: '#333333',
   },
   emissionCard: {
-    padding: 20,
+    padding: 10,
     backgroundColor: '#FFFFFF',
     margin: 20,
     borderRadius: 10,
@@ -127,23 +187,38 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.2,
     shadowRadius: 10,
     elevation: 5,
+    alignItems: 'center',
+
+    position: 'relative', // Para posicionar o texto no centro
   },
-  emissionCircle: {
-    width: 40,
-    height: 40,
-    borderRadius: 20,
-    backgroundColor: '#4CAF50',
+  pieWrapper: {
+    position: 'relative', // Para sobrepor o texto ao gráfico
+  },
+  innerCircle: {
+    position: 'absolute',
+    width: 120,
+    height: 120,
+    borderRadius: 60,
+    backgroundColor: '#FFFFFF',
+    top: 50,
+    left: (Dimensions.get('window').width - 160) / 2,
+  },
+  centeredText: {
+    position: 'absolute',
+    top: '38%', // Ajusta a posição do texto no centro
+    left: 0,
+    right: 0,
     justifyContent: 'center',
     alignItems: 'center',
   },
-  emissionCircleText: {
-    fontSize: 16,
-    color: '#FFFFFF',
-  },
-  emissionText: {
-    fontSize: 16,
+  emissionStatusText: {
+    fontSize: 22,
+    fontWeight: 'bold',
     color: '#333333',
-    marginTop: 10,
+  },
+  emissionPercentageText: {
+    fontSize: 18,
+    color: '#333333',
   },
   truckImage: {
     width: 200,
