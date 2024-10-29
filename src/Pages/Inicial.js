@@ -12,7 +12,7 @@ export default function Inicial({navigation}) {
         { id: '1', title: 'Sobre Nós', icon: 'arrow-up-bold-circle-outline', pagina: "sobre"},
         { id: '2', title: 'Relatório', icon: 'file-chart' },
         { id: '3', title: 'Frota', icon: 'truck-delivery',pagina: "TelaFrota" },
-        { id: '4', title: 'Reduzir impactos', icon: 'cart-outline' },
+        { id: '4', title: 'Reduzir impactos', icon: 'cart-outline', pagina: "reduzirimpactos" },
         { id: '5', title: 'Registrar Veículo', icon: 'book-open-page-variant' , pagina: "registro"},
         { id: '6', title: 'Calculo Manual', icon: 'calculator' , pagina: "calculo"},
     ];

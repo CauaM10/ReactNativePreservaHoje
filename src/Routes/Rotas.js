@@ -11,6 +11,8 @@ import TelaFrota from '../Pages/TelaFrota'
 import RelatorioCaminhao from '../Pages/RelatorioCaminhao'
 import Calculo from '../Pages/CalculoManual'
 import Cadastro from '../Pages/Cadastro'
+import ReduzirImpactos from '../Pages/ReduzirImpactos'
+import DetalhesLugares from '../Pages/DetalhesLugares'
 
 
 import Sobre from '../Pages/Sobrenos'
@@ -19,11 +21,7 @@ import Sobre from '../Pages/Sobrenos'
 import Login from '../Pages/Login';
 
 
-
 export default function Rotas() {
-
-
-
 
     const { logado, cadastro, action, globalId } = useContext(AuthContext);
 
@@ -58,6 +56,14 @@ export default function Rotas() {
 
     if (action == "TelaFrota") {
         return (< TelaFrota />)
+    }
+
+    if (action == "reduzirimpactos") {
+        return (< ReduzirImpactos id={globalId}/>)
+    }
+
+    if (action == "DetalhesLugares") {
+        return (< DetalhesLugares/>)
     }
 
     if (action == "calculo") {
