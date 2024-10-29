@@ -1,5 +1,10 @@
-import React, { useState, useRef, useEffect } from 'react';
-import { View, Text, TouchableOpacity, Switch, StyleSheet, Image, Animated, Dimensions, Easing } from 'react-native';
+
+import React, { useState, useContext, useEffect, useRef } from 'react';
+import { View, Text, TouchableOpacity, Switch, StyleSheet, ActivityIndicator, Image, Animated, Dimensions, Easing, Pressable } from 'react-native';
+import FontAwesome6 from '@expo/vector-icons/FontAwesome6';
+import { AuthContext } from '../Context/AuthContext';
+
+
 
 const TABS = ['Sobre Nós', 'Serviços', 'Objetivo'];
 const TEXTS = [
@@ -9,6 +14,8 @@ const TEXTS = [
 ];
 
 const App = () => {
+
+
   const [tabIndex, setTabIndex] = useState(0);
   const [isNotificationEnabled, setNotificationEnabled] = useState(false);
   
@@ -80,6 +87,7 @@ const TabNavigation = ({ tabs, activeIndex, onTabPress, animation }) => {
   const tabWidth = windowWidth / tabs.length;
   const underlineWidth = 80;
 
+
   return (
     <View>
       <View style={styles.tabContainer}>
@@ -121,11 +129,24 @@ const NotificationSwitch = ({ isEnabled, toggleSwitch }) => (
   </View>
 );
 
-const Footer = () => (
-  <View style={styles.footer}>
-    <Text style={styles.footerIcon}>🏠</Text>
-  </View>
-);
+
+// Footer Component
+ 
+
+const Footer = () => {
+  const { setAction } = useContext(AuthContext);
+
+  return (
+    <View style={styles.footer}>
+      <Pressable onPress={() => setAction('home')} style={styles.volt}>
+        <FontAwesome6 name="house" size={24} color="#4CAF50" />
+      </Pressable>
+    </View>
+  );
+};
+
+
+
 
 const styles = StyleSheet.create({
   container: {

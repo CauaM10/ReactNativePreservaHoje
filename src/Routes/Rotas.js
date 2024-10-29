@@ -12,6 +12,7 @@ import RelatorioCaminhao from '../Pages/RelatorioCaminhao'
 import Calculo from '../Pages/CalculoManual'
 import Cadastro from '../Pages/Cadastro'
 import ReduzirImpactos from '../Pages/ReduzirImpactos'
+import DetalhesLugares from '../Pages/DetalhesLugares'
 
 
 import Sobre from '../Pages/Sobrenos'
@@ -20,13 +21,9 @@ import Sobre from '../Pages/Sobrenos'
 import Login from '../Pages/Login';
 
 
-
 export default function Rotas() {
 
-
-
-
-    const { logado, cadastro, action } = useContext(AuthContext);
+    const { logado, cadastro, action, globalId } = useContext(AuthContext);
 
     if (!logado && action == "home") {
         return (<Login />)
@@ -53,8 +50,8 @@ export default function Rotas() {
 
 
 
-    if (action == "relatoriocaminhao") {
-        return (< RelatorioCaminhao />)
+    if (action == "RelatorioCaminhao") {
+        return (< RelatorioCaminhao id={globalId} />)
     }
 
     if (action == "TelaFrota") {
@@ -62,7 +59,11 @@ export default function Rotas() {
     }
 
     if (action == "reduzirimpactos") {
-        return (< ReduzirImpactos />)
+        return (< ReduzirImpactos id={globalId}/>)
+    }
+
+    if (action == "DetalhesLugares") {
+        return (< DetalhesLugares/>)
     }
 
     if (action == "calculo") {

@@ -1,20 +1,47 @@
 import React from 'react';
-import { View, Text, Image, TextInput, TouchableOpacity, StyleSheet, ScrollView, FlatList} from 'react-native';
-import { useContext } from "react";
+import { View, Text, Image, TextInput, TouchableOpacity, StyleSheet, ScrollView, FlatList, Pressable } from 'react-native';
+import { useContext, useEffect, useState } from "react";
 import { AuthContext } from "../Context/AuthContext";
+import Icone from '@expo/vector-icons/Ionicons';
 
 
-const ReduzirImpactos = () => {
+const ReduzirImpactos = (item) => {
 
-    const { setAction } = useContext(AuthContext);
+    const { setAction, setGlobalId } = useContext(AuthContext);
+    const [lugares, setLugares] = useState([]);
+    const [loading, setLoading] = useState(true);
 
     const places = [
-        { id: 1, name: 'Reflorestamento', location: 'Pederneiras - SP', image: require('../../assets/Eucalipto.jpg'), pagina: "reflorestamento"},
+        { id: 1, name: 'Reflorestamento', location: 'Pederneiras - SP', image: require('../../assets/Eucalipto.jpg'), pagina: "reflorestamento" },
         { id: 2, name: 'Reciclagem', location: 'Jáu - SP', image: require('../../assets/reciclagem.jpg') },
     ];
 
+    const getLugar = async () => {
+        try {
+            const response = await fetch('http://10.139.75.61:5251/api/Lugar/GetAllLugar', {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            });
+            const json = await response.json();
+            setLugares(json);
+        } catch (err) {
+            console.log(err);
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    
+
     return (
         <View style={styles.container}>
+            <View style={styles.header}>
+                <Pressable onPress={() => setAction('home')} style={styles.volt}>
+                    <Icone name="arrow-back" size={42} color="green" />
+                </Pressable>
+            </View>
             <TextInput
                 style={styles.input}
                 placeholder="Local" placeholderTextColor={'lightgray'}
@@ -34,8 +61,7 @@ const ReduzirImpactos = () => {
                         <TouchableOpacity
                             key={item.id}
                             style={styles.card}
-                            
-                           
+                            onPress={() => { setGlobalId(item.lugarId); setAction('DetalhesLugares'); }}
                         >
                             <Image source={item.image} style={styles.image} />
                             <View style={styles.cardTextContainer}>
@@ -53,14 +79,17 @@ const ReduzirImpactos = () => {
 
 const styles = StyleSheet.create({
     container: {
-        top: 10,
         flex: 1,
         backgroundColor: '#f5f5f5',
-        padding: 10,
+        padding: 10
+    },
+    volt: {
+        marginTop: 30,
     },
     input: {
-        width: "100%",
+        width: "90%",
         height: 50,
+        left: 15,
         borderWidth: 1,
         borderRadius: 25,
         borderColor: "black",
@@ -71,7 +100,7 @@ const styles = StyleSheet.create({
     headerText: {
         fontSize: 22,
         padding: 9,
-        top: 30,
+        top: 25,
         fontWeight: 'bold',
         color: '#4CAF50',
         marginBottom: 40,
@@ -108,7 +137,7 @@ const styles = StyleSheet.create({
         shadowRadius: 5,
         elevation: 3,
     },
-
+    
     image: {
         width: '100%',
         height: '100%',
