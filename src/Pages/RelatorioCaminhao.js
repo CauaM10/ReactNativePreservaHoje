@@ -24,7 +24,7 @@ const TruckDetails = ({ id }) => {
       setVehicles(json);
 
       // Supondo que a emissão esteja presente nos dados retornados
-      const emissao = json?.emissao ?? 20; // Coloque um valor padrão de 50 se a emissão não for encontrada
+      const emissao = json?.emissao ?? 76; // Coloque um valor padrão de 50 se a emissão não for encontrada
       setEmissionLevel(emissao);
     } catch (err) {
       setError(err.message);
@@ -48,7 +48,7 @@ const TruckDetails = ({ id }) => {
   // Função para determinar o nível de emissão
   const getEmissionStatus = () => {
     if (emissionLevel <= 33) {
-      return 'Baixa';
+      return 'Leve';
     } else if (emissionLevel <= 66) {
       return 'Moderada';
     } else {
@@ -80,7 +80,7 @@ const TruckDetails = ({ id }) => {
               {
                 name: 'Emissão',
                 population: emissionLevel, // Nível de emissão
-                color: emissionLevel <= 33 ? '#4CAF50' : emissionLevel <= 66 ? '#FFD700' : '#FF6347',
+                color: emissionLevel <= 33 ? '#4CAF50' : emissionLevel <= 66 ? 'yellow' : 'red',
                
               },
               {

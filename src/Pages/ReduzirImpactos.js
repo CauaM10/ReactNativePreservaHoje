@@ -34,7 +34,7 @@ const ReduzirImpactos = () => {
     if (loading) {
         return <Text>Loading...</Text>;
     }
-
+    
     return (
         <View style={styles.container}>
             <View style={styles.header}>
