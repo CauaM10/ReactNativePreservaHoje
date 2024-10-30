@@ -52,7 +52,7 @@ const TelaFrotas = () => {
     <View style={styles.vehicleItem}>
       <View style={styles.vehicleIconContainer}>
         <Image
-          source={require('../../assets/IconeCaminhao.png')}
+          source={require('../../assets/carteira-motorista.png')}
           style={styles.vehicleIcon}
         />
       </View>
@@ -61,14 +61,14 @@ const TelaFrotas = () => {
           {item.modelo.modeloVeiculo && <Text style={styles.vehicleName}>{item.modelo.modeloVeiculo}</Text>}
           {item.motorista.nomeMotorista && <Text style={styles.vehicleDriver}>Motorista: {item.motorista.nomeMotorista}</Text>}
         </View>
-        <View style={{ display: 'flex', flexDirection: 'row' }}>
+        <View style={{ display: 'flex', flexDirection: 'row'}}>
           <TouchableOpacity 
             onPress={() => { setGlobalId(item.veiculoId); setAction('RelatorioCaminhao'); }} 
             style={styles.detailsButton}>
             <Text style={styles.detailsButtonText}>Detalhes</Text>
           </TouchableOpacity>
           <TouchableOpacity onPress={() => handleDelete(item.veiculoId)}>
-          <Image source={require('../../assets/excluir.png')} style = {{ width: 35, height: 35, marginTop: 17, marginLeft: 20}}/>
+            <Text style={{bottom: 65, fontSize: 17, backgroundColor: 'lightgray', borderRadius: 8, width: 20, textAlign: 'center', right: 15}}>X</Text>
           </TouchableOpacity>
             
         </View>
@@ -110,11 +110,12 @@ const styles = StyleSheet.create({
     backgroundColor: '#F5F4F4',
   },
   header: {
-    
-    backgroundColor: '#78e08f',
+    backgroundColor: '#87CE57',
     flexDirection: 'row',
     alignItems: 'center',
-    padding: 16,
+    padding: 20,
+    borderBottomEndRadius: 15,
+    borderBottomStartRadius: 15,
   },
   volt: {
     marginTop: 30,
@@ -132,9 +133,8 @@ const styles = StyleSheet.create({
     backgroundColor: '#F2F2F2',
   },
   vehicleItem: {
-  
     width: '90%',
-    height: 130,
+    height: 140,
     backgroundColor: '#fff',
     borderRadius: 8,
     padding: 16,
@@ -153,31 +153,37 @@ const styles = StyleSheet.create({
   },
   vehicleIconContainer: {
     marginRight: 20,
+    width: "30%"
   },
   vehicleIcon: {
-    width: 78,
-    height: 100,
+    width: 101,
+    height: 70,
+    bottom: 10,
+    right: 10
   },
+ 
   vehicleInfo: {
     flex: 1,
   },
   vehicleName: {
-    fontSize: 18,
+    fontSize: 17,
     fontWeight: 'bold',
-    marginTop: 1,
+    marginTop: 15,
+    right: 15
   },
   vehicleDriver: {
     fontSize: 14,
+    right: 15
   },
   detailsButton: {
-    backgroundColor: '#87CE57',
+    backgroundColor: '#2AAA62',
     borderRadius: 7,
     textAlign: 'center',
     justifyContent: 'center',
-    width: 80,
-    height: 35,
-    marginLeft: '29%',
-    borderColor:'#87CE57',
+    width: 90,
+    height: 30,
+    marginLeft: 105,
+    borderColor:'#2AAA62',
     borderWidth: 2,
     marginTop: 17,
   },
