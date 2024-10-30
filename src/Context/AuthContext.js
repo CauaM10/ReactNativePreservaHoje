@@ -7,6 +7,8 @@ function AuthProvider({ children }) {
     const [error, setError] = useState(false);
     const [action, setAction ] = useState("home");
     const [globalId, setGlobalId ] = useState();
+    const [localizacaoId, setLugarId ] = useState();
+
 
     async function Login(email, senha) {
 
@@ -34,7 +36,7 @@ function AuthProvider({ children }) {
     }
 
     return (
-        <AuthContext.Provider value={{ logado: logado, setLogado: setLogado, Login, error: error, action: action, setAction: setAction, globalId: globalId, setGlobalId: setGlobalId}}>
+        <AuthContext.Provider value={{ logado: logado, setLogado: setLogado, Login, error: error, action: action, setAction: setAction, globalId: globalId, setGlobalId: setGlobalId, localizacaoId: localizacaoId, setLugarId: setLugarId }}>
             {children}
         </AuthContext.Provider>
     )

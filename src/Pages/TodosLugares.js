@@ -1,16 +1,17 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { View, Text, Image, TextInput, TouchableOpacity, StyleSheet, FlatList, Pressable } from 'react-native';
+import { View, Text, Image, TouchableOpacity, StyleSheet, FlatList, Pressable } from 'react-native';
 import { AuthContext } from "../Context/AuthContext";
 import Icone from '@expo/vector-icons/Ionicons';
+
 import Ionicons from '@expo/vector-icons/Ionicons';
 
-
-const ReduzirImpactos = () => {
-    const { setAction, setGlobalId } = useContext(AuthContext);
-    const [lugares, setLugares] = useState([]);
+const ImpactReduction = () => {
+    const { setAction} = useContext(AuthContext);
+    const [lugares, setLugares] = useState([]); 
     const [loading, setLoading] = useState(true);
 
-    const getLugar = async () => {
+
+    const fetchsetLugares = async () => { 
         try {
             const response = await fetch('http://10.139.75.86:5251/api/Lugar/GetAllLugar', {
                 method: 'GET',
@@ -28,7 +29,7 @@ const ReduzirImpactos = () => {
     };
 
     useEffect(() => {
-        getLugar();
+        fetchsetLugares();
     }, []);
 
     if (loading) {
@@ -37,30 +38,12 @@ const ReduzirImpactos = () => {
 
     return (
         <View style={styles.container}>
-            <View style={styles.header}>
-                <Pressable onPress={() => setAction('home')} style={styles.volt}>
-                    <Icone name="arrow-back" size={42} color="green" />
-                </Pressable>
-            </View>
-            <TextInput
-                style={styles.input}
-                placeholder="Local" placeholderTextColor={'lightgray'}
-            />
-            <Text style={styles.headerText}>Projetos Sustentáveis</Text>
-            <View style={{ display: 'flex', flexDirection: 'row' }}>
-                <TouchableOpacity style={styles.filterButton}>
-                    <Text style={styles.filterButtonText}>Mais Vistos</Text>
-                </TouchableOpacity>
-                <TouchableOpacity onPress={() => { setAction('TodosLugares'); }} style={styles.filterButton2}>
-                    <Text style={styles.filterButtonText}>Ver Todos</Text>
-                </TouchableOpacity>
-            </View>
-
-
-            <View style={styles.placesContainer}>
-                <FlatList
+        <Pressable onPress={() => setAction('reduzirimpactos')} style={styles.volt}>
+          <Icone name="arrow-back" size={32} color="green" />
+        </Pressable>
+        <FlatList
                     data={lugares}
-                    horizontal
+                    
                     keyExtractor={(item) => item.lugarId.toString()}
                     renderItem={({ item }) => (
                         <TouchableOpacity
@@ -86,7 +69,8 @@ const ReduzirImpactos = () => {
                     )}
                     contentContainerStyle={{ gap: 5 }}
                 />
-            </View>
+
+        
         </View>
     );
 };
@@ -97,60 +81,39 @@ const styles = StyleSheet.create({
         backgroundColor: '#f5f5f5',
         padding: 10,
     },
-    volt: {
-        marginTop: 30,
-    },
-    iconeLocalizacao:{
+    locationIcon:{ 
         marginTop: 4,
         marginLeft: 9
     },
 
-    input: {
-        width: "90%",
-        height: 50,
-        left: 15,
-        borderWidth: 1,
-        borderRadius: 25,
-        borderColor: "black",
-        padding: 15,
-        marginTop: 30,
-        color: 'white',
+   
+    placeInfo: {
+        position: 'absolute',
+        bottom: 0,
+        left: 10,
+        height: '20%',
+        bottom: 40,
+        right: 0,
+        padding: 10,
+        width: '90%',
+        backgroundColor: "rgba(19, 19, 19, 0.82)",
+        borderRadius: 15
     },
-    headerText: {
-        fontSize: 22,
-        padding: 9,
-        top: 25,
-        fontWeight: 'bold',
-        color: '#4CAF50',
-        marginBottom: 40,
-    },
-    filterButton: {
-        backgroundColor: '#4CAF50',
-        paddingVertical: 8,
-        paddingHorizontal: 15,
-        borderRadius: 20,
-        alignSelf: 'flex-start',
-        marginBottom: 15,
-    },    filterButton2: {
-        backgroundColor: '#4CAF50',
-        paddingVertical: 8,
-        paddingHorizontal: 15,
-        marginLeft: 160,
-        borderRadius: 20,
-        alignSelf: 'flex-start',
-        marginBottom: 15,
-    },
-    filterButtonText: {
-        color: '#ffffff',
+    placeLocation: {
         fontSize: 16,
+        marginTop: 5,
+        fontWeight: 'bold',
+        color: 'gray',
     },
-    placesContainer: {
-        width: "100%",
-        top: 10,
-        flexDirection: 'row',
-        flexWrap: 'wrap',
-        justifyContent: 'space-between',
-        gap: 20,
+    placeObjective: {
+        fontSize: 17,
+        marginTop: 5,
+        marginLeft: 10,
+        fontWeight: 'bold',
+        color: '#fff',
+    },
+    volt: {
+        marginTop: 30
     },
     card: {
         width: 250,
@@ -204,4 +167,4 @@ const styles = StyleSheet.create({
     },
 });
 
-export default ReduzirImpactos;
+export default ImpactReduction; 
