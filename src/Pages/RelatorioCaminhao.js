@@ -1,5 +1,6 @@
 import React, { useEffect, useState, useContext } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, Image, Pressable, Dimensions } from 'react-native';
+import { LinearGradient } from 'expo-linear-gradient'
 import Ionicons from '@expo/vector-icons/Ionicons';
 import { AuthContext } from '../Context/AuthContext';
 import { PieChart } from 'react-native-chart-kit';
@@ -62,7 +63,8 @@ const TruckDetails = ({ id }) => {
       <View style={styles.header}>
         <TouchableOpacity style={styles.backButton}></TouchableOpacity>
         <Pressable onPress={() => setAction('TelaFrota')} style={styles.volt}>
-          <Ionicons name="arrow-back" size={32} color="green" />
+          <Ionicons name="arrow-back" size={32} color="green" bottom={20} right={30} />
+          <Text style={styles.textback}>Auto Móvel</Text>
         </Pressable>
         <Text style={styles.headerTitle}></Text>
         <View style={styles.profileIcon}>
@@ -79,23 +81,19 @@ const TruckDetails = ({ id }) => {
                 name: 'Emissão',
                 population: emissionLevel, // Nível de emissão
                 color: emissionLevel <= 33 ? '#4CAF50' : emissionLevel <= 66 ? '#FFD700' : '#FF6347',
-                legendFontColor: '#333333',
-                legendFontSize: 15,
+               
               },
               {
                 name: 'Restante',
                 population: 100 - emissionLevel,
-                color: '#F0F0F0',
-                legendFontColor: '#333333',
-                legendFontSize: 15,
+                color: '#D3D3D3',
+               
               },
             ]}
-            width={Dimensions.get('window').width - 40}
-            height={220}
+            width={Dimensions.get('window').width - 500}
+            height={130}
             chartConfig={{
-              backgroundColor: '#FFFFFF',
-              backgroundGradientFrom: '#FFFFFF',
-              backgroundGradientTo: '#FFFFFF',
+             
               decimalPlaces: 0, // Sem casas decimais
               color: (opacity = 1) => `rgba(0, 0, 0, ${opacity})`,
             }}
@@ -115,6 +113,7 @@ const TruckDetails = ({ id }) => {
             <Text style={styles.emissionPercentageText}>{emissionLevel}%</Text>
           </View>
         </View>
+        <Text style={{bottom: 100, left: 165, fontSize:15}}>Emissão do dia</Text>
       </View>
 
       <Image source={{ uri: item.modelo.foto }} style={styles.truckImage} />
@@ -123,7 +122,7 @@ const TruckDetails = ({ id }) => {
         <Image source={require('../../assets/IconeCarro.png')} style={styles.scaniaLogo} />
         {item.modelo.modeloVeiculo && <Text style={styles.vehicleName}>{item.modelo.modeloVeiculo}</Text>}
       </View>
-      <View style={{ display: 'flex', flexDirection: 'row', marginLeft: 15 }}>
+      <View style={{ display: 'flex', flexDirection: 'row', marginLeft: 22 }}>
         <View style={styles.infoItem}>
           <Text style={styles.infoItemTitle}>Motorista</Text>
           {item.motorista.nomeMotorista && <Text style={styles.vehicleDriver}>     {item.motorista.nomeMotorista}</Text>}
@@ -143,22 +142,20 @@ const TruckDetails = ({ id }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#F0F0F0',
+    backgroundColor: 'white',
   },
   header: {
     flexDirection: 'row',
     alignItems: 'center',
-    padding: 20,
-    backgroundColor: '#FFFFFF',
+    padding: 50,
+    borderBottomEndRadius: 20,
+    borderBottomStartRadius: 20,
+    backgroundColor: '#87CE57',
     borderBottomWidth: 1,
+    zIndex: -1,
     borderBottomColor: '#CCCCCC',
   },
-  backButton: {
-    width: 40,
-    height: 40,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
+  
   headerTitle: {
     flex: 1,
     textAlign: 'center',
@@ -168,51 +165,60 @@ const styles = StyleSheet.create({
   profileIcon: {
     width: 40,
     height: 40,
-    justifyContent: 'center',
-    alignItems: 'center',
+    bottom: 23,
+    left: 30
   },
   volt: {
-    marginTop: 30,
+    marginTop: 20,
+    display: "flex"
+  },
+  textback:{
+    bottom: 52,
+    left:10,
+    fontWeight: 'bold',
+    fontSize: 23,
+    color: '#fff',
   },
   profileIconText: {
     fontSize: 24,
     color: '#333333',
   },
   emissionCard: {
-    padding: 10,
     backgroundColor: '#FFFFFF',
+    display: "flex",
     margin: 20,
-    borderRadius: 10,
+    width: "75%",
+    height: 140,
+    bottom: 80,
+    borderRadius: 15,
     shadowColor: '#000000',
-    shadowOpacity: 0.2,
+    shadowOpacity: 0.1,
     shadowRadius: 10,
     elevation: 5,
-    alignItems: 'center',
-
-    position: 'relative', // Para posicionar o texto no centro
+    left: 35
   },
   pieWrapper: {
     position: 'relative', // Para sobrepor o texto ao gráfico
   },
   innerCircle: {
     position: 'absolute',
-    width: 120,
-    height: 120,
+    width: 83,
+    height: 83,
     borderRadius: 60,
-    backgroundColor: '#FFFFFF',
-    top: 50,
-    left: (Dimensions.get('window').width - 160) / 2,
+    backgroundColor: '#F0F0F0',
+    top: 23,
+    left: (Dimensions.get('window').width - 355) / 2,
   },
   centeredText: {
     position: 'absolute',
-    top: '38%', // Ajusta a posição do texto no centro
+    top: '30%', // Ajusta a posição do texto no centro
     left: 0,
-    right: 0,
+    right: 170,
     justifyContent: 'center',
     alignItems: 'center',
   },
   emissionStatusText: {
-    fontSize: 22,
+    fontSize: 20,
     fontWeight: 'bold',
     color: '#333333',
   },
@@ -223,17 +229,19 @@ const styles = StyleSheet.create({
   truckImage: {
     width: 200,
     height: 200,
-    resizeMode: 'contain',
+    bottom: 105,
+    resizeMode: "contain",
     alignSelf: 'center',
   },
   truckInfo: {
-    width: '90%',
-    height: 130,
+    width: '83%',
+    height: 160,
     borderColor: "#D9D9D9",
+    bottom: 110,
     borderWidth: 2,
     marginLeft: 2,
-    borderRadius: 5,
-    marginLeft: 20,
+    borderRadius: 15,
+    marginLeft: 37,
     alignItems: 'center',
   },
   scaniaLogo: {
@@ -243,28 +251,28 @@ const styles = StyleSheet.create({
     marginTop: -20,
   },
   infoItem: {
-    marginTop: 30,
-    width: 180,
-    height: 100,
+    width: 160,
+    height: 120,
+    bottom: 90,
     borderColor: "#D9D9D9",
     borderWidth: 2,
-    marginLeft: 5,
-    borderRadius: 5,
+    marginLeft: 15,
+    borderRadius: 10,
   },
   infoItem2: {
-    marginTop: 30,
-    width: 180,
-    height: 100,
+    width: 160,
+    height: 120,
+    bottom: 90,
     borderColor: "#D9D9D9",
     borderWidth: 2,
-    marginLeft: 10,
-    borderRadius: 5,
+    marginLeft: 20,
+    borderRadius: 10,
   },
   reportButton: {
-    marginTop: 30,
-    width: '90%',
+    width: '82%',
     height: 55,
-    marginLeft: 20,
+    bottom: 65,
+    marginLeft: 38,
     backgroundColor: '#87CE57',
     borderRadius: 10,
     alignItems: 'center',
@@ -274,6 +282,10 @@ const styles = StyleSheet.create({
     marginLeft: '10%',
     marginTop: 10,
   },
+  vehicleName:{
+    color: '#87CE57',
+    top: 5
+  }
 });
 
 export default TruckDetails;

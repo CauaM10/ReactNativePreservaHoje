@@ -55,11 +55,12 @@ const style = StyleSheet.create({
         zIndex: -1
     },
     headerText: {
-        color: "black",
+        color: "white",
         textAlign: "left",
         marginLeft: "20px",
         marginTop: "30px",
-        fontSize: 20,
+        fontWeight: "bold",
+        fontSize: 25,
         padding: 30,
     },
     container: {
