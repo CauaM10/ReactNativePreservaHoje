@@ -13,7 +13,7 @@ const LugarDetalhes = ({ id }) => {
 
   const getLugar = async () => {
     try {
-      const response = await fetch('http://10.139.75.61:5251/api/Lugar/GetLugarId/' + id, {
+      const response = await fetch('http://10.139.75.61:5001/api/Lugar/GetLugarId/' + id, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
