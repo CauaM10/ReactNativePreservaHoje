@@ -9,12 +9,12 @@ const TruckDetails = ({ id }) => {
   const { setAction } = useContext(AuthContext);
   const [vehicles, setVehicles] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
+  const [error, setError] = useState(null); 
   const [emissionLevel, setEmissionLevel] = useState(0); // Nível de emissão (0 a 100)
 
   const getVeiculo = async () => {
     try {
-      const response = await fetch('http://10.139.75.86:5251/api/Veiculo/GetVeiculoId/' + id, {
+      const response = await fetch('http://10.139.75.86:5001/api/Veiculo/GetVeiculoId/' + id, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',

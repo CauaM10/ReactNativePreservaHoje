@@ -10,7 +10,7 @@ const TelaFrotas = () => {
 
   const getVeiculo = async () => {
     try {
-      const response = await fetch('http://10.139.75.86:5251/api/Veiculo/GetAllVeiculo', {
+      const response = await fetch('http://10.139.75.86:5001/api/Veiculo/GetAllVeiculo', {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
@@ -27,7 +27,7 @@ const TelaFrotas = () => {
 
   const handleDelete = async (id) => {
     try {
-      const response = await fetch('http://10.139.75.61:5251/api/Veiculo/DeleteVeiculo/' + id, {
+      const response = await fetch('http://10.139.75.86:5001/api/Veiculo/DeleteVeiculo/' + id, {
         method: 'DELETE',
         headers: {
           'Content-Type': 'application/json',

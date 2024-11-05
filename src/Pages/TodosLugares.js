@@ -13,7 +13,7 @@ const ImpactReduction = () => {
 
     const fetchsetLugares = async () => { 
         try {
-            const response = await fetch('http://10.139.75.86:5251/api/Lugar/GetAllLugar', {
+            const response = await fetch('http://10.139.75.86:5001/api/Lugar/GetAllLugar', {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
@@ -48,7 +48,7 @@ const ImpactReduction = () => {
                     renderItem={({ item }) => (
                         <TouchableOpacity
                             style={styles.card}
-                            onPress={() => { setGlobalId( item.lugarId ); setAction('DetalhesLugares'); }}
+                            
                         >
                             {item.foto ? (
                                 <Image source={{ uri: item.foto }} style={styles.image} />
@@ -67,7 +67,7 @@ const ImpactReduction = () => {
                             </View>
                         </TouchableOpacity>
                     )}
-                    contentContainerStyle={{ gap: 5 }}
+                    contentContainerStyle={{ gap:10 }}
                 />
 
         
@@ -85,8 +85,10 @@ const styles = StyleSheet.create({
         marginTop: 4,
         marginLeft: 9
     },
-
-   
+    iconeLocalizacao:{
+        marginTop: 4,
+        marginLeft: 9
+    },
     placeInfo: {
         position: 'absolute',
         bottom: 0,
@@ -116,8 +118,9 @@ const styles = StyleSheet.create({
         marginTop: 30
     },
     card: {
-        width: 250,
-        height: 450,
+        top: 50,
+        width: "100%",
+        height: 250,
         backgroundColor: '#fff',
         borderRadius: 10,
         overflow: 'hidden',
@@ -144,7 +147,7 @@ const styles = StyleSheet.create({
         position: 'absolute', // Adiciona esta propriedade
         bottom: 0, // Para posicionar na parte inferior do cartão
         left: 10,
-        height: '20%',
+        height: '40%',
         bottom: 40,
         right: 0,
         padding: 10,

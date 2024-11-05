@@ -12,7 +12,7 @@ const ReduzirImpactos = () => {
 
     const getLugar = async () => {
         try {
-            const response = await fetch('http://10.139.75.86:5251/api/Lugar/GetAllLugar', {
+            const response = await fetch('http://10.139.75.86:5001/api/Lugar/GetAllLugar', {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
@@ -106,20 +106,20 @@ const styles = StyleSheet.create({
     },
 
     input: {
-        width: "90%",
+        width: "100%",
         height: 50,
-        left: 15,
+        
         borderWidth: 1,
         borderRadius: 25,
         borderColor: "black",
         padding: 15,
-        marginTop: 30,
+        marginTop: 25,
         color: 'white',
     },
     headerText: {
         fontSize: 22,
         padding: 9,
-        top: 25,
+        top: 20,
         fontWeight: 'bold',
         color: '#4CAF50',
         marginBottom: 40,
@@ -131,11 +131,12 @@ const styles = StyleSheet.create({
         borderRadius: 20,
         alignSelf: 'flex-start',
         marginBottom: 15,
-    },    filterButton2: {
+    },    
+    filterButton2: {
         backgroundColor: '#4CAF50',
         paddingVertical: 8,
         paddingHorizontal: 15,
-        marginLeft: 160,
+        marginLeft: 10,
         borderRadius: 20,
         alignSelf: 'flex-start',
         marginBottom: 15,
@@ -146,7 +147,7 @@ const styles = StyleSheet.create({
     },
     placesContainer: {
         width: "100%",
-        top: 10,
+        top: 20,
         flexDirection: 'row',
         flexWrap: 'wrap',
         justifyContent: 'space-between',

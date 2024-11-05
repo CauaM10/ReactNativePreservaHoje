@@ -3,7 +3,7 @@ import { View, Text, Image, StyleSheet, ScrollView, Pressable, TouchableOpacity 
 import Icone from '@expo/vector-icons/Ionicons';
 import { AuthContext } from "../Context/AuthContext";
 import Ionicons from '@expo/vector-icons/Ionicons';
-import { Button } from 'react-native-paper';
+
 
 const LugarDetalhes = ({ id }) => {
   const { setAction } = useContext(AuthContext);
@@ -13,7 +13,7 @@ const LugarDetalhes = ({ id }) => {
 
   const getLugar = async () => {
     try {
-      const response = await fetch('http://10.139.75.86:5251/api/Lugar/GetLugarId/' + id, {
+      const response = await fetch('http://10.139.75.86:5001/api/Lugar/GetAllLugar/' + id, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
@@ -44,7 +44,7 @@ const LugarDetalhes = ({ id }) => {
   const item = lugares;
 
   return (
-    <ScrollView style={styles.container}>
+    <View style={styles.container}>
       <View style={styles.itemContainer}>
         <Pressable onPress={() => setAction('reduzirimpactos')} style={styles.volt}>
           <Icone name="arrow-back" size={32} color="green" />
@@ -69,29 +69,35 @@ const LugarDetalhes = ({ id }) => {
 
           </View>
         </View>
-        <Text>Detalhes</Text>
-        <Text>{item.detalhesLugar}</Text>
-
-        <TouchableOpacity style={styles.botao}><Text></Text></TouchableOpacity>
+        <View style={{top: 55}}>
+          <Text style={{left: 38, fontWeight: "bold"}}>Detalhes</Text>
+          <Text style={{left: 30, textAlign:"justify", width: "85%", top: 30}}>{item.detalhesLugar}</Text>
+        </View>
       </View>
-    </ScrollView>
+      <TouchableOpacity style={styles.botao}><Text style={{color: "white", fontWeight: "bold"}}>Ajude o Projeto</Text></TouchableOpacity>
+    </View>
   );
 };
 
 const styles = StyleSheet.create({
+  
   volt: {
-    marginLeft: 50,
-    marginTop: 50
+    marginLeft: 5,
+    marginTop: 30
   },
   image: {
     width: '100%',
     height: '100%',
     resizeMode: "cover",
-  }, placeInfo: {
-    position: 'absolute', // Adiciona esta propriedade
-    bottom: 0, // Para posicionar na parte inferior do cartão
+  }, 
+  iconeLocalizacao:{
     left: 10,
-    height: '20%',
+    top: 5
+  },
+  placeInfo: {
+    position: 'absolute', // Adiciona esta propriedade
+    left: 17,
+    height: '23%',
     bottom: 40,
     right: 0,
     padding: 10,
@@ -101,22 +107,25 @@ const styles = StyleSheet.create({
   },
   placeLocation: {
     fontSize: 16,
-    marginTop: 5,
+    marginTop: 8,
+    left: 5,
     fontWeight: 'bold',
     color: 'gray',
   },
   placeObjective: {
     fontSize: 17,
-    marginTop: 5,
+    marginTop: 13,
     marginLeft: 10,
     fontWeight: 'bold',
     color: '#fff',
   },
   card: {
-    width: 250,
-    height: 450,
+    width: 355,
+    height: 440,
+    left: 28,
+    top: 10,
     backgroundColor: '#fff',
-    borderRadius: 10,
+    borderRadius: 30,
     overflow: 'hidden',
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 2 },
@@ -126,11 +135,15 @@ const styles = StyleSheet.create({
     position: 'relative', // Para que o 'placeInfo' possa ser posicionado relativamente a este contêiner
   },
   botao:{
-    width: 200,
-    height:45,
+    width: "86%",
+    height: 55,
+    top: 90,
+    left: 25,
     backgroundColor: '#87CE57',
     borderRadius: 10,
-    marginTop: 100
+    marginTop: 100,
+    alignItems: "center",
+    padding: 20
   }
 });
 
