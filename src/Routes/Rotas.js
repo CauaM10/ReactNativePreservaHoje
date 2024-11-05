@@ -12,6 +12,7 @@ import Cadastro from '../Pages/Cadastro'
 import ReduzirImpactos from '../Pages/ReduzirImpactos'
 import DetalhesLugares from '../Pages/DetalhesLugares'
 import TodosLugares from '../Pages/TodosLugares'
+import Relatorio from '../Pages/Relatorio'
 
 
 
@@ -79,6 +80,8 @@ export default function Rotas() {
         return (< Cadastro />)
     }
 
-
+    if (action == "relatorio") {
+        return (< Relatorio/>)
+    }
 
 }
