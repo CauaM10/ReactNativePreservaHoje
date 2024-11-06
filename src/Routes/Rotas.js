@@ -15,6 +15,7 @@ import TodosLugares from '../Pages/TodosLugares'
 import Relatorio from '../Pages/Relatorio'
 
 
+
 import Sobre from '../Pages/Sobrenos'
 
 /*import Cadastro from '../Pages/Cadastro'*/
@@ -47,6 +48,7 @@ export default function Rotas() {
     if (action == "registro") {
         return (< Registro />)
     }
+    
 
 
 

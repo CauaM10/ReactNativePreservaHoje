@@ -13,7 +13,9 @@ const ImpactReduction = () => {
 
     const fetchsetLugares = async () => { 
         try {
-            const response = await fetch('http://10.139.75.61:5001/api/Lugar/GetAllLugar', {
+
+            const response = await fetch('http://10.139.75.86:5001/api/Lugar/GetAllLugar', {
+
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',

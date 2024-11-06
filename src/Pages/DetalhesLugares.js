@@ -3,7 +3,7 @@ import { View, Text, Image, StyleSheet, ScrollView, Pressable, TouchableOpacity 
 import Icone from '@expo/vector-icons/Ionicons';
 import { AuthContext } from "../Context/AuthContext";
 import Ionicons from '@expo/vector-icons/Ionicons';
-import { Button } from 'react-native-paper';
+
 
 const LugarDetalhes = ({ id }) => {
   const { setAction } = useContext(AuthContext);
@@ -13,7 +13,8 @@ const LugarDetalhes = ({ id }) => {
 
   const getLugar = async () => {
     try {
-      const response = await fetch('http://10.139.75.61:5001/api/Lugar/GetLugarId/' + id, {
+
+      const response = await fetch('http://10.139.75.86:5001/api/Lugar/GetLugarId/' + id, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
@@ -139,6 +140,7 @@ const styles = StyleSheet.create({
     left: 25,
     backgroundColor: '#87CE57',
     borderRadius: 10,
+    marginTop: 100,
     alignItems: "center",
     padding: 20
   }

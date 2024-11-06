@@ -16,14 +16,15 @@ import {
 import React, { useContext, useState, useRef } from 'react';
 import { AuthContext } from '../Context/AuthContext';
 import Ionicons from '@expo/vector-icons/Ionicons';
+import Feather from '@expo/vector-icons/Feather';
 
 export default function Cadastro() {
   const { setAction } = useContext(AuthContext);
-  const [email, setEmail] = useState("");
-  const [telefone, setTelefone] = useState("");
-  const [cnpj, setCnpj] = useState("");
-  const [nome, setNome] = useState("");
-  const [senha, setSenha] = useState("");
+  const [emailEmpresa, setEmail] = useState("");
+  const [telefoneEmpresa, setTelefone] = useState("");
+  const [cnpjEmpresa, setCnpj] = useState("");
+  const [nomeEmpresa, setNome] = useState("");
+  const [senhaEmpresa, setSenha] = useState("");
   const [erro, setErro] = useState(false);
   const [sucesso, setSucesso] = useState(false);
   const [activeInput, setActiveInput] = useState(null);
@@ -51,38 +52,40 @@ export default function Cadastro() {
   };
 
   const validateInputs = () => {
-    if (!nome || !email || !telefone || !cnpj || !senha) {
+    if (!nomeEmpresa || !emailEmpresa || !telefoneEmpresa || !cnpjEmpresa || !senhaEmpresa) {
       setErro("Todos os campos são obrigatórios.");
       return false;
     }
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(email)) {
+    if (!emailRegex.test(emailEmpresa)) {
       setErro("Email inválido.");
       return false;
     }
-    if (senha.length < 6) {
+    if (senhaEmpresa.length < 6) {
       setErro("A senha deve ter pelo menos 6 caracteres.");
       return false;
     }
-    const cnpjRegex = /^\d{2}\.\d{3}\.\d{3}\/\d{4}-\d{2}$/;
+    
+    /*
+    const cnpjRegex = /^(\d{2})(\d{5})(\d{4})$/;
     if (!cnpjRegex.test(cnpj)) {
       setErro("CNPJ inválido. Use o formato xx.xxx.xxx/xxxx-xx");
       return false;
     }
-    return true;
+    */
   };
 
-  const checkPasswordStrength = (senha) => {
+  const checkPasswordStrength = (senhaEmpresa) => {
     const strongPassword = /(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}/;
     const mediumPassword = /(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[A-Za-z\d]{6,}/;
 
     let strengthValue = 0;
 
-    if (strongPassword.test(senha)) {
+    if (strongPassword.test(senhaEmpresa)) {
       strengthValue = 3; // Forte
-    } else if (mediumPassword.test(senha)) {
+    } else if (mediumPassword.test(senhaEmpresa)) {
       strengthValue = 2; // Média
-    } else if (senha.length > 0) {
+    } else if (senhaEmpresa.length > 0) {
       strengthValue = 1; // Fraca
     }
 
@@ -104,7 +107,7 @@ export default function Cadastro() {
     const onlyDigits = text.replace(/\D/g, '');
     // Aplica a formatação
     if (onlyDigits.length <= 14) {
-      const formattedCNPJ = onlyDigits.replace(/^(\d{2})(\d{3})(\d{3})(\d{4})(\d{2})$/, '$1.$2.$3/$4-$5');
+      const formattedCNPJ = onlyDigits.replace(/^(\d{2})(\d{5})(\d{4})$/, '($1) $2-$3');
       setCnpj(formattedCNPJ);
     }
   };
@@ -119,41 +122,37 @@ export default function Cadastro() {
     }
   };
 
-  async function handleCadastro() {
-    if (strength < 3) {
-      setErro("A senha deve ser forte para se cadastrar.");
-      return;
-    }
-    if (!validateInputs()) return;
+  async function Cadastro() {
 
-    await fetch('http://10.139.75.32:5251/api/Usuarios/CreateUsuario', {
+
+    await fetch('http://10.139.75.86:5001/api/CadastroEmpresa/CreateEmpresa', {
       method: 'POST',
       headers: {
         'content-type': 'application/json'
       },
       body: JSON.stringify({
-        usuarioNome: nome,
-        usuarioEmail: email,
-        usuarioTelefone: telefone,
-        usuarioCnpj: cnpj,
-        usuarioSenha: senha
+        nomeEmpresa: nomeEmpresa,
+        cnpjEmpresa: cnpjEmpresa,
+        telefoneEmpresa: telefoneEmpresa,
+        emailEmpresa: emailEmpresa,
+        senhaEmpresa: senhaEmpresa
       })
     })
       .then(res => res.json())
       .then(json => {
-        setSucesso(!!json.usuarioId);
-        setErro(!json.usuarioId);
+        setSucesso(!!json.cadastroEmpresaId);
+        setErro(!json.cadastroEmpresaId);
       })
       .catch(() => setErro("Erro ao cadastrar. Tente novamente."));
   }
 
   const renderStrengthCriteria = () => {
     const criteria = [
-      { text: "8 caracteres", met: senha.length >= 8 },
-      { text: "1 letra maiúscula", met: /[A-Z]/.test(senha) },
-      { text: "1 letra minúscula", met: /[a-z]/.test(senha) },
-      { text: "1 número", met: /\d/.test(senha) },
-      { text: "1 caractere especial", met: /[@$!%*?&]/.test(senha) },
+      { text: "8 caracteres", met: senhaEmpresa.length >= 8 },
+      { text: "1 letra maiúscula", met: /[A-Z]/.test(senhaEmpresa) },
+      { text: "1 letra minúscula", met: /[a-z]/.test(senhaEmpresa) },
+      { text: "1 número", met: /\d/.test(senhaEmpresa) },
+      { text: "1 caractere especial", met: /[@$!%*?&]/.test(senhaEmpresa) },
     ];
     
     return (
@@ -225,51 +224,57 @@ export default function Cadastro() {
           <View style={css.container}>
             {sucesso ? (
               <>
-                <Text style={css.text}>Obrigado por se cadastrar. Seu cadastro foi realizado com sucesso!</Text>
-                <Button title="Novo Usuário" onPress={() => setSucesso(false)} />
+              <Feather name="check-circle" size={130} color="#87CE57" />
+              <Text style={{color:'#87CE57', fontWeight: 'bold', marginTop: 15, fontSize: 18}}>PARABÉNS!</Text>
+                <Text style={{marginTop: 15}}>Cadastro realizado com sucesso!</Text>
+                <Text style={{marginTop: 5}}>Aproveite todos os benefícios e recursos que oferecemos.</Text>
+                <View>
+                <TouchableOpacity style={{ backgroundColor:'#87CE57', marginTop: 20, width: 200, height: 40, borderRadius: 20, alignItems: 'center', justifyContent: 'center', }}   onPress={() => setSucesso(false)} ><Text style={{color: '#fff' , fontWeight: 'bold', fontSize: 15}}>Fechar</Text></TouchableOpacity>
+                </View>
+              
               </>
             ) : (
               <>
                 {/* Input Nome */}
                 <View style={css.inputContainer(activeInput === 'nome')}>
-                  <Animated.Text style={[css.label, { top: activeInput === "nome" || nome ? top : 15 }]}>Nome</Animated.Text>
+                  <Animated.Text style={[css.label, { top: activeInput === "nome" || nomeEmpresa ? top : 15 }]}>Nome</Animated.Text>
                   <Ionicons name="person" size={20} color="black" style={css.icon} />
                   <TextInput
                     style={css.input}
-                    value={nome}
+                    TextInput={nomeEmpresa}
                     onChangeText={(text) => setNome(text)}
                     onFocus={() => { setActiveInput('nome'); subirLabel(); }}
                     onBlur={() => { setActiveInput(null); }}
-                    onEndEditing={() => { if (!nome) descerLabel(); }}
+                    onEndEditing={() => { if (!nomeEmpresa) descerLabel(); }}
                   />
                 </View>
 
                 {/* Input Email */}
                 <View style={css.inputContainer(activeInput === 'email')}>
-                  <Animated.Text style={[css.label, { top: activeInput === "email" || email ? top : 15 }]}>Email</Animated.Text>
+                  <Animated.Text style={[css.label, { top: activeInput === "email" || emailEmpresa ? top : 15 }]}>Email</Animated.Text>
                   <Ionicons name="mail" size={20} color="black" style={css.icon} />
                   <TextInput
                     style={css.input}
-                    value={email}
+                    TextInput={emailEmpresa}
                     onChangeText={(text) => setEmail(text)}
                     onFocus={() => { setActiveInput('email'); subirLabel(); }}
                     onBlur={() => { setActiveInput(null); }}
-                    onEndEditing={() => { if (!email) descerLabel(); }}
+                    onEndEditing={() => { if (!emailEmpresa) descerLabel(); }}
                     keyboardType="email-address"
                   />
                 </View>
 
                 {/* Input Telefone */}
                 <View style={css.inputContainer(activeInput === 'telefone')}>
-                  <Animated.Text style={[css.label, { top: activeInput === "telefone" || telefone ? top : 15 }]}>Telefone</Animated.Text>
+                  <Animated.Text style={[css.label, { top: activeInput === "telefone" || telefoneEmpresa ? top : 15 }]}>Telefone</Animated.Text>
                   <Ionicons name="call" size={20} color="black" style={css.icon} />
                   <TextInput
                     style={css.input}
-                    value={telefone}
+                    TextInput={telefoneEmpresa}
                     onChangeText={formatTelefone}
                     onFocus={() => { setActiveInput('telefone'); subirLabel(); }}
                     onBlur={() => { setActiveInput(null); }}
-                    onEndEditing={() => { if (!telefone) descerLabel(); }}
+                    onEndEditing={() => { if (!telefoneEmpresa) descerLabel(); }}
                     keyboardType="phone-pad"
                     maxLength={15} // Limitar a quantidade de caracteres
                   />
@@ -277,33 +282,33 @@ export default function Cadastro() {
 
                 {/* Input CNPJ */}
                 <View style={css.inputContainer(activeInput === 'cnpj')}>
-                  <Animated.Text style={[css.label, { top: activeInput === "cnpj" || cnpj ? top : 15 }]}>CNPJ</Animated.Text>
+                  <Animated.Text style={[css.label, { top: activeInput === "cnpj" || cnpjEmpresa ? top : 15 }]}>CNPJ</Animated.Text>
                   <Ionicons name="business" size={20} color="black" style={css.icon} />
                   <TextInput
                     style={css.input}
-                    value={cnpj}
+                    TextInput={cnpjEmpresa}
                     onChangeText={formatCNPJ}
                     onFocus={() => { setActiveInput('cnpj'); subirLabel(); }}
                     onBlur={() => { setActiveInput(null); }}
-                    onEndEditing={() => { if (!cnpj) descerLabel(); }}
+                    onEndEditing={() => { if (!cnpjEmpresa) descerLabel(); }}
                     maxLength={18} // Limitar a quantidade de caracteres
                   />
                 </View>
 
                 {/* Input Senha */}
                 <View style={css.inputContainer(activeInput === 'senha')}>
-                  <Animated.Text style={[css.label, { top: activeInput === "senha" || senha ? top : 15 }]}>Senha</Animated.Text>
+                  <Animated.Text style={[css.label, { top: activeInput === "senha" || senhaEmpresa ? top : 15 }]}>Senha</Animated.Text>
                   <Ionicons name="lock-closed" size={20} color="black" style={css.icon} />
                   <TextInput
                     style={css.input}
-                    value={senha}
+                    TextInput={senhaEmpresa}
                     onChangeText={(text) => {
                       setSenha(text);
                       checkPasswordStrength(text);
                     }}
                     onFocus={() => { setActiveInput('senha'); subirLabel(); }}
                     onBlur={() => { setActiveInput(null); }}
-                    onEndEditing={() => { if (!senha) descerLabel(); }}
+                    onEndEditing={() => { if (!senhaEmpresa) descerLabel(); }}
                     secureTextEntry={!showPassword}
                   />
                   <Pressable onPress={() => setShowPassword(!showPassword)} style={css.eyeIcon}>
@@ -315,7 +320,7 @@ export default function Cadastro() {
                 {strength > 0 && renderStrengthBar()}
                 {strength > 0 && renderStrengthCriteria()}
 
-                <TouchableOpacity style={css.btnCadastrar} onPress={handleCadastro}>
+                <TouchableOpacity style={css.btnCadastrar} onPress={Cadastro}>
                   <Text style={css.btnCadastrarText}>Cadastrar</Text>
                 </TouchableOpacity>
 

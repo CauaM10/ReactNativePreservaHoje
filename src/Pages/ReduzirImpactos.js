@@ -12,7 +12,7 @@ const ReduzirImpactos = () => {
 
     const getLugar = async () => {
         try {
-            const response = await fetch('http://10.139.75.61:5001/api/Lugar/GetAllLugar', {
+            const response = await fetch('http://10.139.75.86:5001/api/Lugar/GetAllLugar', {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
@@ -34,7 +34,7 @@ const ReduzirImpactos = () => {
     if (loading) {
         return <Text>Loading...</Text>;
     }
-
+    
     return (
         <View style={styles.container}>
             <View style={styles.header}>
@@ -51,9 +51,7 @@ const ReduzirImpactos = () => {
                 <TouchableOpacity style={styles.filterButton}>
                     <Text style={styles.filterButtonText}>Mais Vistos</Text>
                 </TouchableOpacity>
-                <TouchableOpacity onPress={() => { setAction('TodosLugares'); }} style={styles.filterButton2}>
-                    <Text style={styles.filterButtonText}>Ver Todos</Text>
-                </TouchableOpacity>
+
             </View>
 
 
