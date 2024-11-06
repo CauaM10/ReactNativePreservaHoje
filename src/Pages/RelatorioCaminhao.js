@@ -70,6 +70,7 @@ const TruckDetails = ({ id }) => {
                 const emissaoemKg = (json.kmsRodados / json.veiculo.consumo) * FatorCombustivel(json.veiculo.tipoCombustivel.combustivel);
                 setEmissao(json.kmsRodados);
                 setEmissionLevel(emissaoemKg);
+                setEmissaoemKg(emissaoemKg.toFixed(2) );
             })
             .catch((err) => {
                 setError(false);
@@ -81,7 +82,7 @@ const TruckDetails = ({ id }) => {
     }, []);
 
     useEffect(() => {
-        if (vehicles.length) {
+        if (vehicles) {
             getKmsRodadosDia();
         }
     }, [vehicles]);
@@ -154,10 +155,9 @@ const TruckDetails = ({ id }) => {
                         {/* Texto no centro do gráfico */}
                         <View style={styles.centeredText}>
                             <Text style={styles.emissionStatusText}>{getEmissionStatus()}</Text>
-                            <Text style={styles.emissionPercentageText}>{emissionLevel}%</Text>
                         </View>
                         <Text style={{ bottom: 90, left: 165, fontSize: 15 }}>Emissão do dia</Text>
-                        <Text style={{ bottom: 90, left: 165, fontSize: 15, marginTop: 10 }}>{emissaoemKg.toFixed(2)} Kg</Text>
+                        <Text style={{ bottom: 90, left: 165, fontSize: 15, marginTop: 10 }}>{emissaoemKg}</Text>
                     </View>
                 )}
             </View>
@@ -261,7 +261,7 @@ const styles = StyleSheet.create({
     },
     centeredText: {
         position: 'absolute',
-        top: '23%', // Ajusta a posição do texto no centro
+        top: '27%', // Ajusta a posição do texto no centro
         left: 0,
         right: 167,
         justifyContent: 'center',

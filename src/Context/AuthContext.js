@@ -17,7 +17,7 @@ function AuthProvider({ children }) {
         console.log(email,senha); 
         if (email != "" && senha != "") {
            
-            await fetch('http://10.139.75.86:5001/api/CadastroEmpresa/Login/' + email + "/" + senha, {
+            await fetch('http://10.139.75.61:5001/api/CadastroEmpresa/Login/' + email + "/" + senha, {
                 method: 'GET',
                 headers: { 'content-type': 'application/json' }
             })

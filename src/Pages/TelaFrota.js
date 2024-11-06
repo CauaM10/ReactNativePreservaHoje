@@ -11,7 +11,7 @@ const TelaFrotas = () => {
   const getVeiculo = async () => {
     try {
 
-      const response = await fetch('http://10.139.75.86:5001/api/Veiculo/GetAllVeiculo', {
+      const response = await fetch('http://10.139.75.61:5001/api/Veiculo/GetAllVeiculo', {
 
         method: 'GET',
         headers: {
@@ -63,6 +63,7 @@ const TelaFrotas = () => {
       <View style={{ display: 'block' }}>
         <View style={styles.vehicleInfo}>
           {item.modelo.modeloVeiculo && <Text style={styles.vehicleName}>{item.modelo.modeloVeiculo}</Text>}
+          {item.placaVeiculo && <Text>{item.placaVeiculo}</Text>}
           {item.motorista.nomeMotorista && <Text style={styles.vehicleDriver}>Motorista: {item.motorista.nomeMotorista}</Text>}
         </View>
         <View style={{ display: 'flex', flexDirection: 'row'}}>
