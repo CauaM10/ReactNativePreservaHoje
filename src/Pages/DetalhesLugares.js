@@ -65,8 +65,6 @@ const LugarDetalhes = ({ id }) => {
               <Ionicons name="location-outline" style={styles.iconeLocalizacao} size={24} color="gray" />
               {item.endereçoLugar && <Text style={styles.placeLocation}>  {item.endereçoLugar}</Text>}
             </View>
-
-
           </View>
         </View>
         <View style={{top: 55}}>
