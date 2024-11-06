@@ -13,6 +13,7 @@ const LugarDetalhes = ({ id }) => {
 
   const getLugar = async () => {
     try {
+
       const response = await fetch('http://10.139.75.86:5001/api/Lugar/GetLugarId/' + id, {
         method: 'GET',
         headers: {

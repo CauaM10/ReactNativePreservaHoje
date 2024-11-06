@@ -4,7 +4,6 @@ import {
     StyleSheet,
     TextInput,
     TouchableOpacity,
-    Button,
     Pressable,
     Animated,
     Easing,
@@ -19,11 +18,12 @@ import { AuthContext } from '../Context/AuthContext';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import foto from '..//../assets/PreservaHj-risco.png';
 
-export default function Login({ navigation }) {
-    const { Login, setAction } = useContext(AuthContext);
+export default function Login() {
+    const { setAction, setGlobalId, Login, error, setCadastro } = useContext(AuthContext);
+
     const [email, setEmail] = useState("");
     const [senha, setSenha] = useState("");
-    const [error, setErro] = useState(false);
+    const [errorMessage, setErrorMessage] = useState("");  // Novo estado para mensagens de erro
     const [showPassword, setShowPassword] = useState(false);
     const [activeInput, setActiveInput] = useState(null);
 
@@ -49,32 +49,39 @@ export default function Login({ navigation }) {
 
     const validateInputs = () => {
         if (!email || !senha) {
-            setErro("Todos os campos são obrigatórios.");
+            setErrorMessage("Todos os campos são obrigatórios.");
             return false;
         }
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
         if (!emailRegex.test(email)) {
-            setErro("Email inválido.");
+            setErrorMessage("Email inválido.");
             return false;
         }
         if (senha.length < 6) {
-            setErro("A senha deve ter pelo menos 6 caracteres.");
+            setErrorMessage("A senha deve ter pelo menos 6 caracteres.");
             return false;
         }
         return true;
     };
 
-    function RealizaLogin() {
-        Login(email, senha);
+    async function RealizaLogin() {
+        setErrorMessage(""); // Limpa qualquer mensagem de erro antes de tentar login
+
+        if (validateInputs()) {
+            const loginSuccess = await Login(email, senha); // Supondo que Login retorne sucesso/falha
+
+            if (!loginSuccess) {  // Caso o login falhe
+                setErrorMessage("Email ou Senha incorretos.");
+                return false;
+            }
+        }
     }
 
     return (
-
         <>
-
             <View style={css.header}>
                 <Image
-                    source={foto} // Substitua pela URL da sua imagem
+                    source={foto}
                     style={css.image}
                     resizeMode="contain"
                 />
@@ -87,9 +94,10 @@ export default function Login({ navigation }) {
             >
                 <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
                     <View style={{ flex: 1 }}>
-
                         <View style={css.container}>
                             <Text style={css.title}>Login</Text>
+
+                            {/* Campo de Email */}
                             <View style={css.inputContainer(activeInput === 'email')}>
                                 <Animated.Text style={[css.label, { top: activeInput === "email" || email ? top : 15 }]}>Email</Animated.Text>
                                 <Ionicons name="mail" size={20} color="black" style={css.icon} />
@@ -104,6 +112,7 @@ export default function Login({ navigation }) {
                                 />
                             </View>
 
+                            {/* Campo de Senha */}
                             <View style={css.inputContainer(activeInput === 'senha')}>
                                 <Animated.Text style={[css.label, { top: activeInput === "senha" || senha ? top : 15 }]}>Senha</Animated.Text>
                                 <Ionicons name="lock-closed" size={20} color="black" style={css.icon} />
@@ -121,28 +130,32 @@ export default function Login({ navigation }) {
                                 </Pressable>
                             </View>
 
+                            {/* Botão de Login */}
                             <TouchableOpacity style={css.btnLogin} onPress={RealizaLogin}>
                                 <Text style={css.btnLoginText}>Login</Text>
                             </TouchableOpacity>
-                            {error && (
+
+                            {/* Mensagem de Erro */}
+                            {errorMessage && (
                                 <View style={css.error}>
-                                    <Text style={css.errorText}>Revise os campos. Tente novamente!</Text>
+                                    <Text style={css.errorText}>{errorMessage}</Text>
                                 </View>
                             )}
+
                             <View style={css.signupContainer}>
                                 <Text style={css.signupText}>Não tem uma conta ainda? </Text>
-                                <TouchableOpacity >
-                                    <Pressable onPress={() => setAction('cadastro')}><Text style={css.signupLink} >Cadastre-se</Text></Pressable>
-                                </TouchableOpacity>
+                                <Pressable onPress={() => setAction('cadastro')}>
+                                    <Text style={css.signupLink}>Cadastre-se</Text>
+                                </Pressable>
                             </View>
                         </View>
                     </View>
                 </TouchableWithoutFeedback>
             </KeyboardAvoidingView>
-
         </>
     );
 }
+
 
 const css = StyleSheet.create({
     header: {

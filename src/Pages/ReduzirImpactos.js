@@ -51,9 +51,7 @@ const ReduzirImpactos = () => {
                 <TouchableOpacity style={styles.filterButton}>
                     <Text style={styles.filterButtonText}>Mais Vistos</Text>
                 </TouchableOpacity>
-                <TouchableOpacity onPress={() => { setAction('TodosLugares'); }} style={styles.filterButton2}>
-                    <Text style={styles.filterButtonText}>Ver Todos</Text>
-                </TouchableOpacity>
+
             </View>
 
 

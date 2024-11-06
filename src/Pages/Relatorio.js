@@ -70,7 +70,7 @@ const LineChartExample = () => {
             <Text style={{top: 8}}>Etanol</Text>
           </View>
           <View style={{paddingLeft: 50 }}>
-            <Text style={{fontSize: 30, fontWeight: "500", fontStyle: "italic"}}>40%</Text>
+            <Text style={{fontSize: 30, fontWeight: "500", fontStyle: "italic"}}>45%</Text>
             <Text style={{top: 8}}>Diesel</Text>
           </View>
         </View>
