@@ -155,7 +155,7 @@ export default function Cadastro() {
       { text: "1 número", met: /\d/.test(senha) },
       { text: "1 caractere especial", met: /[@$!%*?&]/.test(senha) },
     ];
-
+    
     return (
       <Text style={{ fontSize: 14, textAlign: 'center', marginVertical: 10 }}>
         {criteria.map((criterion, index) => (
