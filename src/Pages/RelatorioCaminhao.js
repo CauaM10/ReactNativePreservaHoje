@@ -17,7 +17,7 @@ const TruckDetails = ({ id }) => {
     const [emissaoemKg, setEmissaoemKg] = useState(0); // Emissão em Kg
 
     const getVeiculo = async () => {
-        await fetch('http://10.139.75.61:5001/api/Veiculo/GetVeiculoId/' + id, {
+        await fetch('http://10.139.75.80:5001/api/Veiculo/GetVeiculoId/' + id, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
@@ -52,7 +52,7 @@ const TruckDetails = ({ id }) => {
     }
 
     async function getKmsRodadosDia() {
-        await fetch('http://10.139.75.61:5001/api/KmsRodados/GetKmVeiculoDia/' + id + "/" + moment().format('YYYY-MM-DD'),
+        await fetch('http://10.139.75.80:5001/api/KmsRodados/GetKmVeiculoDia/' + id + "/" + moment().format('YYYY-MM-DD'),
             {
                 method: 'GET',
                 headers: {

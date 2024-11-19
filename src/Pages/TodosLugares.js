@@ -6,29 +6,31 @@ import Icone from '@expo/vector-icons/Ionicons';
 import Ionicons from '@expo/vector-icons/Ionicons';
 
 const ImpactReduction = () => {
-    const { setAction} = useContext(AuthContext);
-    const [lugares, setLugares] = useState([]); 
+    const { setAction } = useContext(AuthContext);
+    const [lugares, setLugares] = useState([]);
     const [loading, setLoading] = useState(true);
 
 
-    const fetchsetLugares = async () => { 
-        try {
-
-            const response = await fetch('http://10.139.75.86:5001/api/Lugar/GetAllLugar', {
-
-                method: 'GET',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-            });
-            const json = await response.json();
-            setLugares(json);
-        } catch (err) {
-            console.log(err);
-        } finally {
-            setLoading(false);
-        }
-    };
+    async function fetchsetLugares() {
+        await fetch('http://10.139.75.80:5001/api/Lugar/GetAllLugar', {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        })
+            .then(res => res.json())
+            .then(json => {
+                setLugares(json);
+                setLoading(false);
+            })
+            .catch((err) => {
+                setLoading(false);
+                console.log(err);
+            })
+            .finally(() => {
+                setLoading(false);
+            })
+    }
 
     useEffect(() => {
         fetchsetLugares();
@@ -40,39 +42,39 @@ const ImpactReduction = () => {
 
     return (
         <View style={styles.container}>
-        <Pressable onPress={() => setAction('reduzirimpactos')} style={styles.volt}>
-          <Icone name="arrow-back" size={32} color="green" />
-        </Pressable>
-        <FlatList
-                    data={lugares}
-                    
-                    keyExtractor={(item) => item.lugarId.toString()}
-                    renderItem={({ item }) => (
-                        <TouchableOpacity
-                            style={styles.card}
-                            
-                        >
-                            {item.foto ? (
-                                <Image source={{ uri: item.foto }} style={styles.image} />
-                            ) : (
-                                <View style={styles.imagePlaceholder}><Text>No Image</Text></View>
-                            )}
-                            <View style={styles.placeInfo}>
-                                
-                            {item.objetivoLugar && <Text style={styles.placeObjective}> {item.objetivoLugar}</Text>}
-                            <View style={{ display: 'flex', flexDirection: 'row', marginTop: 3}}>
-                            <Ionicons name="location-outline" style={styles.iconeLocalizacao} size={24} color="gray" />
-                            {item.endereçoLugar && <Text style={styles.placeLocation}>  {item.endereçoLugar}</Text>}
-                            </View>
-                           
-                                
-                            </View>
-                        </TouchableOpacity>
-                    )}
-                    contentContainerStyle={{ gap:10 }}
-                />
+            <Pressable onPress={() => setAction('reduzirimpactos')} style={styles.volt}>
+                <Icone name="arrow-back" size={32} color="green" />
+            </Pressable>
+            <FlatList
+                data={lugares}
 
-        
+                keyExtractor={(item) => item.lugarId.toString()}
+                renderItem={({ item }) => (
+                    <TouchableOpacity
+                        style={styles.card}
+
+                    >
+                        {item.foto ? (
+                            <Image source={{ uri: item.foto }} style={styles.image} />
+                        ) : (
+                            <View style={styles.imagePlaceholder}><Text>No Image</Text></View>
+                        )}
+                        <View style={styles.placeInfo}>
+
+                            {item.objetivoLugar && <Text style={styles.placeObjective}> {item.objetivoLugar}</Text>}
+                            <View style={{ display: 'flex', flexDirection: 'row', marginTop: 3 }}>
+                                <Ionicons name="location-outline" style={styles.iconeLocalizacao} size={24} color="gray" />
+                                {item.endereçoLugar && <Text style={styles.placeLocation}>  {item.endereçoLugar}</Text>}
+                            </View>
+
+
+                        </View>
+                    </TouchableOpacity>
+                )}
+                contentContainerStyle={{ gap: 10 }}
+            />
+
+
         </View>
     );
 };
@@ -83,11 +85,11 @@ const styles = StyleSheet.create({
         backgroundColor: '#f5f5f5',
         padding: 10,
     },
-    locationIcon:{ 
+    locationIcon: {
         marginTop: 4,
         marginLeft: 9
     },
-    iconeLocalizacao:{
+    iconeLocalizacao: {
         marginTop: 4,
         marginLeft: 9
     },

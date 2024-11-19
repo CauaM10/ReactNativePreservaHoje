@@ -3,7 +3,7 @@ import { createContext, useState } from "react";
 export const AuthContext = createContext(0);
 
 function AuthProvider({ children }) {
-    const [logado, setLogado] = useState(false);
+    const [logado, setLogado] = useState(true);
     const [error, setError] = useState(false);
     const [action, setAction ] = useState("home");
     const [globalId, setGlobalId ] = useState();
@@ -17,7 +17,7 @@ function AuthProvider({ children }) {
         console.log(email,senha); 
         if (email != "" && senha != "") {
            
-            await fetch('http://10.139.75.61:5001/api/CadastroEmpresa/Login/' + email + "/" + senha, {
+            await fetch('http://10.139.75.80:5001/api/CadastroEmpresa/Login/' + email + "/" + senha, {
                 method: 'GET',
                 headers: { 'content-type': 'application/json' }
             })

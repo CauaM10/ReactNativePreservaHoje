@@ -125,7 +125,7 @@ export default function Cadastro() {
   async function Cadastro() {
 
 
-    await fetch('http://10.139.75.61:5001/api/CadastroEmpresa/CreateEmpresa', {
+    await fetch('http://10.139.75.80:5001/api/CadastroEmpresa/CreateEmpresa', {
       method: 'POST',
       headers: {
         'content-type': 'application/json'
